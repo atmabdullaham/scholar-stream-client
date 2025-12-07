@@ -1,9 +1,11 @@
 import { createBrowserRouter } from "react-router";
 import AuthLayout from "../layouts/AuthLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
 import AllScholarships from "../pages/allScholarships/AllScholarships";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import MyProfile from "../pages/dashboard/myProfile/MyProfile";
 import Error from "../pages/error/Error";
 import Home from "../pages/home/Home";
 
@@ -23,6 +25,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  // auth layout
   {
     path: "/auth",
     Component: AuthLayout,
@@ -34,6 +37,17 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+    ],
+  },
+  // dashboard layout
+  {
+    path: "dashboard",
+    Component: DashboardLayout,
+    children: [
+      {
+        path: "my-profile",
+        element: <MyProfile></MyProfile>,
       },
     ],
   },

@@ -129,6 +129,7 @@ const Navbar = () => {
 
               <li>
                 <Link
+                  to={"/dashboard"}
                   className="text-sm py-2 mt-1 hover:border-cyan-500 border-l-4 border-transparent 
         hover:bg-cyan-50 dark:hover:bg-green-900/20 dark:hover:text-white
         dark:border-transparent"
