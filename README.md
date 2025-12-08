@@ -9,3 +9,4 @@
 - react-router
 - sweetalert2
 - react-hook-form
+- tanstack/react-query

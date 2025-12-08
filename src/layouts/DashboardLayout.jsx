@@ -1,4 +1,5 @@
 import { BsFillPersonVcardFill } from "react-icons/bs";
+import { FaUsersCog } from "react-icons/fa";
 import { MdHome } from "react-icons/md";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { VscSettings } from "react-icons/vsc";
@@ -61,6 +62,17 @@ const DashboardLayout = () => {
                 <BsFillPersonVcardFill size={24} />
 
                 <span className="is-drawer-close:hidden">My Profile</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="Users Management"
+                to={"/dashboard/users-management"}
+              >
+                <FaUsersCog size={24} />
+                <span className="is-drawer-close:hidden">Users Management</span>
               </NavLink>
             </li>
 

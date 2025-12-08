@@ -6,6 +6,7 @@ import AllScholarships from "../pages/allScholarships/AllScholarships";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import MyProfile from "../pages/dashboard/myProfile/MyProfile";
+import UsersManagement from "../pages/dashboard/userManagement/UserManagement";
 import Error from "../pages/error/Error";
 import Home from "../pages/home/Home";
 
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "my-profile",
         element: <MyProfile></MyProfile>,
+      },
+      {
+        path: "users-management",
+        element: <UsersManagement></UsersManagement>,
       },
     ],
   },
