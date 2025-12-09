@@ -1,5 +1,6 @@
 import { BsFillPersonVcardFill } from "react-icons/bs";
 import { FaUsersCog } from "react-icons/fa";
+import { IoSchoolSharp } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { VscSettings } from "react-icons/vsc";
@@ -73,6 +74,17 @@ const DashboardLayout = () => {
               >
                 <FaUsersCog size={24} />
                 <span className="is-drawer-close:hidden">Users Management</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="Add Scholarship"
+                to={"/dashboard/add-scholarship"}
+              >
+                <IoSchoolSharp size={24} />
+                <span className="is-drawer-close:hidden">Add Scholarship</span>
               </NavLink>
             </li>
 

@@ -1,0 +1,184 @@
+[
+  {
+    "country": "Canada",
+    "cities": [
+      "Toronto",
+      "Vancouver",
+      "Montreal",
+      "Ottawa",
+      "Calgary",
+      "Edmonton",
+      "Waterloo"
+    ]
+  },
+  {
+    "country": "United States",
+    "cities": [
+      "Boston",
+      "New York",
+      "Chicago",
+      "Los Angeles",
+      "San Francisco",
+      "Pittsburgh",
+      "Atlanta"
+    ]
+  },
+  {
+    "country": "United Kingdom",
+    "cities": [
+      "London",
+      "Oxford",
+      "Cambridge",
+      "Manchester",
+      "Edinburgh",
+      "Glasgow",
+      "Birmingham"
+    ]
+  },
+  {
+    "country": "Australia",
+    "cities": [
+      "Sydney",
+      "Melbourne",
+      "Brisbane",
+      "Perth",
+      "Adelaide",
+      "Canberra"
+    ]
+  },
+  {
+    "country": "Germany",
+    "cities": [
+      "Berlin",
+      "Munich",
+      "Frankfurt",
+      "Hamburg",
+      "Stuttgart",
+      "Heidelberg"
+    ]
+  },
+  {
+    "country": "Netherlands",
+    "cities": ["Amsterdam", "Rotterdam", "The Hague", "Utrecht", "Eindhoven"]
+  },
+  {
+    "country": "Sweden",
+    "cities": ["Stockholm", "Gothenburg", "Lund", "Uppsala"]
+  },
+  {
+    "country": "Norway",
+    "cities": ["Oslo", "Bergen", "Trondheim"]
+  },
+  {
+    "country": "Finland",
+    "cities": ["Helsinki", "Tampere", "Espoo"]
+  },
+  {
+    "country": "Denmark",
+    "cities": ["Copenhagen", "Aarhus", "Odense"]
+  },
+  {
+    "country": "France",
+    "cities": ["Paris", "Lyon", "Toulouse", "Grenoble"]
+  },
+  {
+    "country": "Italy",
+    "cities": ["Milan", "Rome", "Bologna", "Turin"]
+  },
+  {
+    "country": "Spain",
+    "cities": ["Madrid", "Barcelona", "Valencia", "Seville"]
+  },
+  {
+    "country": "Portugal",
+    "cities": ["Lisbon", "Porto", "Coimbra"]
+  },
+  {
+    "country": "Ireland",
+    "cities": ["Dublin", "Cork", "Galway"]
+  },
+  {
+    "country": "Switzerland",
+    "cities": ["Zurich", "Geneva", "Lausanne", "Basel"]
+  },
+  {
+    "country": "Austria",
+    "cities": ["Vienna", "Graz", "Salzburg"]
+  },
+  {
+    "country": "Belgium",
+    "cities": ["Brussels", "Leuven", "Ghent"]
+  },
+  {
+    "country": "Poland",
+    "cities": ["Warsaw", "Krakow", "Wroclaw", "Gdansk"]
+  },
+  {
+    "country": "Czech Republic",
+    "cities": ["Prague", "Brno", "Ostrava"]
+  },
+  {
+    "country": "Hungary",
+    "cities": ["Budapest", "Debrecen", "Szeged"]
+  },
+  {
+    "country": "Russia",
+    "cities": ["Moscow", "Saint Petersburg", "Kazan"]
+  },
+  {
+    "country": "China",
+    "cities": ["Beijing", "Shanghai", "Guangzhou", "Nanjing", "Shenzhen"]
+  },
+  {
+    "country": "Japan",
+    "cities": ["Tokyo", "Kyoto", "Osaka", "Nagoya", "Fukuoka"]
+  },
+  {
+    "country": "South Korea",
+    "cities": ["Seoul", "Busan", "Daejeon", "Incheon"]
+  },
+  {
+    "country": "Singapore",
+    "cities": ["Singapore"]
+  },
+  {
+    "country": "Hong Kong",
+    "cities": ["Hong Kong"]
+  },
+  {
+    "country": "Malaysia",
+    "cities": ["Kuala Lumpur", "Johor Bahru", "Penang"]
+  },
+  {
+    "country": "Thailand",
+    "cities": ["Bangkok", "Chiang Mai", "Phuket"]
+  },
+  {
+    "country": "United Arab Emirates",
+    "cities": ["Dubai", "Abu Dhabi", "Sharjah"]
+  },
+  {
+    "country": "Saudi Arabia",
+    "cities": ["Riyadh", "Jeddah", "Dhahran"]
+  },
+  {
+    "country": "Qatar",
+    "cities": ["Doha"]
+  },
+  {
+    "country": "Turkey",
+    "cities": ["Istanbul", "Ankara", "Izmir"]
+  },
+  {
+    "country": "Egypt",
+    "cities": ["Cairo", "Alexandria"]
+  },
+  {
+    "country": "South Africa",
+    "cities": ["Cape Town", "Johannesburg", "Pretoria"]
+  },
+  {
+    "country": "New Zealand",
+    "cities": ["Auckland", "Wellington", "Christchurch"]
+  }
+]
