@@ -1,5 +1,6 @@
 import { BsFillPersonVcardFill } from "react-icons/bs";
 import { FaUsersCog } from "react-icons/fa";
+import { FcManager } from "react-icons/fc";
 import { IoSchoolSharp } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
@@ -85,6 +86,19 @@ const DashboardLayout = () => {
               >
                 <IoSchoolSharp size={24} />
                 <span className="is-drawer-close:hidden">Add Scholarship</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="Scholarship Management"
+                to={"/dashboard/scholarship-management"}
+              >
+                <FcManager size={24}></FcManager>
+                <span className="is-drawer-close:hidden">
+                  ScholarshipManagement
+                </span>
               </NavLink>
             </li>
 
