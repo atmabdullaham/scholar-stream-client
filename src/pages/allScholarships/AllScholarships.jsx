@@ -15,11 +15,7 @@ const AllScholarships = () => {
   const limit = 8;
 
   // REACT QUERY CALL
-  const {
-    refetch,
-    data = {},
-    isLoading,
-  } = useQuery({
+  const { data = {}, isLoading } = useQuery({
     queryKey: [
       "scholarships",
       currentPage,

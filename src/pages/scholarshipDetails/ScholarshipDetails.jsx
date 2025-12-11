@@ -1,0 +1,222 @@
+import { Image } from "@imagekit/react";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { useState } from "react";
+import {
+  FaClock,
+  FaGlobe,
+  FaMapMarkerAlt,
+  FaMoneyBill,
+  FaUniversity,
+} from "react-icons/fa";
+import { FiLayers } from "react-icons/fi";
+import { MdCategory, MdSchool } from "react-icons/md";
+import { Link, useNavigate, useParams } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
+const ScholarshipDetails = () => {
+  const { id } = useParams();
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const axiosSecure = useAxiosSecure();
+  const { data: scholarship = {}, isLoading } = useQuery({
+    queryKey: ["scholarships", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/scholarships/${id}`);
+      return res.data;
+    },
+  });
+  const {
+    _id,
+    scholarshipName,
+    scholarshipCategory,
+    degree,
+    subjectCategory,
+    universityName,
+    universityWorldRank,
+    universityCountry,
+    universityCity,
+    imageUrl,
+    tuitionFees,
+    applicationFees,
+
+    serviceCharge,
+  } = scholarship;
+
+  const deadline = scholarship?.applicationDeadline;
+
+  const safeDate =
+    deadline?.length === 16 ? new Date(deadline + ":00") : new Date(deadline);
+
+  const formattedDateTime = isNaN(safeDate)
+    ? "Invalid Date"
+    : format(safeDate, "dd MMM yyyy, hh:mm a");
+
+  if (loading || isLoading) {
+    return "loading";
+  }
+
+  return (
+    <div className="max-w-5xl mx-auto p-4 md:p-10 bg-teal-50 rounded-2xl">
+      {/* Banner Image */}
+      <div className="w-full rounded-2xl overflow-hidden shadow-lg relative group">
+        <Image
+          urlEndpoint="https://ik.imagekit.io/atm"
+          src={imageUrl}
+          alt={scholarshipName}
+          className="w-full h-[350px] md:h-[420px] lg:h-[500px] object-cover 
+    brightness-95 group-hover:brightness-100 
+    scale-100 group-hover:scale-105 
+    transition-all duration-700 ease-out"
+        />
+
+        {/* Gradient Overlay */}
+        <div
+          className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent 
+  group-hover:from-black/40 transition-all duration-500"
+        ></div>
+
+        {/* Text Overlay (Optional for Styling) */}
+        <div className="absolute bottom-4 left-6 text-white">
+          <h1 className="text-2xl md:text-3xl font-bold drop-shadow-lg">
+            {scholarshipName}
+          </h1>
+          <p className="text-sm md:text-base opacity-90">
+            {universityName}, {universityCountry}
+          </p>
+        </div>
+      </div>
+
+      {/* Title & Post Info */}
+      <div className="mt-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-teal-700">
+          {scholarshipName}
+        </h1>
+      </div>
+
+      {/* Main Scholarship Information */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* LEFT SIDE INFO */}
+        <div className="space-y-5">
+          <div className="flex items-center gap-3">
+            <FaUniversity className="text-teal-600 text-xl" />
+            <div>
+              <p className="text-sm text-gray-500">University</p>
+              <p className="text-lg font-semibold">{universityName}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <FaMapMarkerAlt className="text-teal-600 text-xl" />
+            <div>
+              <p className="text-sm text-gray-500">Location</p>
+              <p className="font-medium">
+                {universityCity}, {universityCountry}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <FaGlobe className="text-teal-600 text-xl" />
+            <div>
+              <p className="text-sm text-gray-500">World Rank</p>
+              <p className="font-medium">#{universityWorldRank}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE INFO */}
+        <div className="space-y-5">
+          <div className="flex items-center gap-3">
+            <MdCategory className="text-teal-600 text-xl" />
+            <div>
+              <p className="text-sm text-gray-500">Scholarship Type</p>
+              <p className="font-medium">{scholarshipCategory}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <MdSchool className="text-teal-600 text-xl" />
+            <div>
+              <p className="text-sm text-gray-500">Degree Level</p>
+              <p className="font-medium">{degree}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <FiLayers className="text-teal-600 text-xl" />
+            <div>
+              <p className="text-sm text-gray-500">Subject Category</p>
+              <p className="font-medium capitalize">{subjectCategory}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* DEADLINE SECTION */}
+      <div className="mt-10 p-5 border border-red-100 bg-red-50 rounded-lg flex items-center gap-4">
+        <FaClock className="text-red-600 text-2xl" />
+        <div>
+          <p className="text-red-600 font-semibold">Application Deadline</p>
+          <p className="text-xl font-bold">{formattedDateTime}</p>
+        </div>
+      </div>
+
+      {/* FEES */}
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-4 bg-gray-50 rounded-lg shadow-sm border">
+          <FaMoneyBill className="text-green-600 text-xl mb-2" />
+          <p className="text-gray-500 text-sm">Application Fee</p>
+          <p className="text-lg font-semibold">${applicationFees}</p>
+        </div>
+
+        <div className="p-4 bg-gray-50 rounded-lg shadow-sm border">
+          <FaMoneyBill className="text-blue-600 text-xl mb-2" />
+          <p className="text-gray-500 text-sm">Tuition Fee</p>
+          <p className="text-lg font-semibold">
+            {tuitionFees ? `$${tuitionFees}` : "Not Required"}
+          </p>
+        </div>
+
+        <div className="p-4 bg-gray-50 rounded-lg shadow-sm border">
+          <FaMoneyBill className="text-rose-600 text-xl mb-2" />
+          <p className="text-gray-500 text-sm">Service Charge</p>
+          <p className="text-lg font-semibold">${serviceCharge}</p>
+        </div>
+      </div>
+
+      {/* DESCRIPTION */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold text-teal-700">
+          Scholarship Description
+        </h2>
+        <p className="mt-3 text-gray-700 leading-relaxed">
+          This scholarship provides opportunities for students pursuing higher
+          education in {subjectCategory}. It is designed to support
+          international applicants seeking high-quality education from a
+          globally ranked institution. Please review all requirements before
+          applying.
+        </p>
+      </div>
+
+      {/* CTA APPLY */}
+      <div className="mt-10">
+        <Link to={`/checkout/${_id}`}>
+          <button className="btn bg-teal-600 text-white btn-lg w-full md:w-auto">
+            Apply for Scholarship
+          </button>
+        </Link>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-14">
+        <h2 className="text-2xl font-bold text-teal-700">Reviews</h2>
+        <p className="text-gray-500 mt-2">No reviews yet.</p>
+      </div>
+    </div>
+  );
+};
+
+export default ScholarshipDetails;

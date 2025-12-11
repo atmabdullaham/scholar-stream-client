@@ -12,6 +12,8 @@ import UpdateScholarship from "../pages/dashboard/updateScholarship/UpdateSchola
 import UsersManagement from "../pages/dashboard/userManagement/UserManagement";
 import Error from "../pages/error/Error";
 import Home from "../pages/home/Home";
+import ScholarshipDetails from "../pages/scholarshipDetails/ScholarshipDetails";
+import PrivateRoutes from "./PrivateRoutes";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
       {
         path: "/all-scholarships",
         Component: AllScholarships,
+      },
+      {
+        path: "/details/:id",
+        element: (
+          <PrivateRoutes>
+            <ScholarshipDetails></ScholarshipDetails>
+          </PrivateRoutes>
+        ),
       },
     ],
   },

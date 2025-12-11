@@ -1,18 +1,16 @@
 import { Image } from "@imagekit/react";
 import { format } from "date-fns";
+import { Link } from "react-router";
 
 const ScholarshipCard = ({ scholarship }) => {
   const {
     _id,
     scholarshipName,
     scholarshipCategory,
-    scholarshipPostDate,
     degree,
     applicationFees,
     imageUrl,
     applicationDeadline,
-    subjectCategory,
-    tuitionFees,
     universityName,
     universityCountry,
     universityCity,
@@ -73,9 +71,12 @@ const ScholarshipCard = ({ scholarship }) => {
           </div>
 
           {/* Button */}
-          <button className="w-full bg-teal-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition">
+          <Link
+            to={`/details/${_id}`}
+            className="btn w-full bg-teal-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition"
+          >
             See Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>
