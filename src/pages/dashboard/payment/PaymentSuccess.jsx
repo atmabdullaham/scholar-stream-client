@@ -90,12 +90,12 @@ const PaymentSuccess = () => {
           </p>
         </div>
         <div className="mt-8 text-center">
-          <a
-            href="/dashboard/my-applications"
+          <Link
+            to="/dashboard/my-applications"
             className="inline-block px-6 py-3 text-lg font-medium text-white transition-transform rounded-full shadow-lg bg-linear-to-r from-teal-600 to-teal-700 hover:scale-105 hover:from-teal-700 hover:to-teal-600"
           >
             Go to My Applications
-          </a>
+          </Link>
         </div>
       </div>
     </div>
