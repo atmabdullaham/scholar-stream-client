@@ -87,7 +87,7 @@ const ScholarshipManagement = () => {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold">Total Agri Products: {total}</h2>
+      <h2 className="text-3xl font-bold">Total Scholarships: {total}</h2>
       <div className="py-3 w-full">
         <div className="">
           {/* FILTERS */}
