@@ -11,11 +11,14 @@ import {
 } from "react-icons/fa";
 import { FiLayers } from "react-icons/fi";
 import { MdCategory, MdSchool } from "react-icons/md";
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -41,7 +44,6 @@ const ScholarshipDetails = () => {
     imageUrl,
     tuitionFees,
     applicationFees,
-
     serviceCharge,
   } = scholarship;
 
@@ -57,6 +59,37 @@ const ScholarshipDetails = () => {
   if (loading || isLoading) {
     return "loading";
   }
+
+  //   payment handler
+  const handleApplyScholarship = async () => {
+    const totalPayable = applicationFees + serviceCharge;
+    const applicationInfo = {
+      scholarshipId: _id,
+      userEmail: user.email,
+      universityName,
+      scholarshipCategory,
+      degree,
+      applicationFees,
+      serviceCharge,
+    };
+    Swal.fire({
+      title: "Are you want to proceed?",
+      text: `Application Fee:${applicationFees}$ + Service Charge: ${serviceCharge}$. So, Total payable is ${totalPayable}$ `,
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm Pay",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await axiosSecure.post(
+          "/create-checkout-session",
+          applicationInfo
+        );
+        window.location.assign(res.data.url);
+      }
+    });
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-10 bg-teal-50 rounded-2xl">
@@ -203,11 +236,12 @@ const ScholarshipDetails = () => {
 
       {/* CTA APPLY */}
       <div className="mt-10">
-        <Link to={`/checkout/${_id}`}>
-          <button className="btn bg-teal-600 text-white btn-lg w-full md:w-auto">
-            Apply for Scholarship
-          </button>
-        </Link>
+        <button
+          onClick={handleApplyScholarship}
+          className="btn bg-teal-600 text-white btn-lg w-full md:w-auto"
+        >
+          Apply for Scholarship
+        </button>
       </div>
 
       {/* Reviews Section */}

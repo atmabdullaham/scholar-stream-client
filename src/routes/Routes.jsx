@@ -7,6 +7,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import AddScholarship from "../pages/dashboard/addScholarship/AddScholarship";
 import MyProfile from "../pages/dashboard/myProfile/MyProfile";
+import PaymentSuccess from "../pages/dashboard/payment/PaymentSuccess";
 import ScholarshipManagement from "../pages/dashboard/scholarshipManagement/ScholarshipManagement";
 import UpdateScholarship from "../pages/dashboard/updateScholarship/UpdateScholarship";
 import UsersManagement from "../pages/dashboard/userManagement/UserManagement";
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
         path: "update-scholarship/:id",
         loader: () => fetch("/countries.json"),
         element: <UpdateScholarship></UpdateScholarship>,
+      },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess></PaymentSuccess>,
       },
     ],
   },
