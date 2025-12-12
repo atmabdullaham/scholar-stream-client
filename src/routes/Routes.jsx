@@ -6,6 +6,7 @@ import AllScholarships from "../pages/allScholarships/AllScholarships";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import AddScholarship from "../pages/dashboard/addScholarship/AddScholarship";
+import ApplicationManagement from "../pages/dashboard/applicationManagement/ApplicationManagement";
 import MyProfile from "../pages/dashboard/myProfile/MyProfile";
 import PaymentCancelled from "../pages/dashboard/payment/PaymentCancelled";
 import PaymentSuccess from "../pages/dashboard/payment/PaymentSuccess";
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: "payment-cancelled",
         element: <PaymentCancelled></PaymentCancelled>,
+      },
+      {
+        path: "application-management",
+        element: <ApplicationManagement></ApplicationManagement>,
       },
     ],
   },

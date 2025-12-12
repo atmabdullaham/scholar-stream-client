@@ -1,4 +1,4 @@
-import { BsFillPersonVcardFill } from "react-icons/bs";
+import { BsFileEarmarkText, BsFillPersonVcardFill } from "react-icons/bs";
 import { FaUsersCog } from "react-icons/fa";
 import { FcManager } from "react-icons/fc";
 import { IoSchoolSharp } from "react-icons/io5";
@@ -98,6 +98,19 @@ const DashboardLayout = () => {
                 <FcManager size={24}></FcManager>
                 <span className="is-drawer-close:hidden">
                   ScholarshipManagement
+                </span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="Application Management"
+                to={"/dashboard/application-management"}
+              >
+                <BsFileEarmarkText size={24} />
+                <span className="is-drawer-close:hidden">
+                  Application Management
                 </span>
               </NavLink>
             </li>

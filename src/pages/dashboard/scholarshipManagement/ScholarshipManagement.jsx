@@ -8,7 +8,6 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ScholarshipManagement = () => {
   const axiosSecure = useAxiosSecure();
-
   const [currentPage, setCurrentPage] = useState(0);
   const [sort, setSort] = useState("createdAt");
   const [order, setOrder] = useState("desc");
