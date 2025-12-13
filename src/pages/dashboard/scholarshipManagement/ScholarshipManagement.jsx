@@ -245,9 +245,6 @@ const ScholarshipManagement = () => {
           </div>
         </div>
       </div>
-      <div>
-        <div className="overflow-x-auto"></div>
-      </div>
     </div>
   );
 };

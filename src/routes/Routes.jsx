@@ -6,8 +6,11 @@ import AllScholarships from "../pages/allScholarships/AllScholarships";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import AddScholarship from "../pages/dashboard/addScholarship/AddScholarship";
+import AllReviews from "../pages/dashboard/allReviews/AllReviews";
 import ApplicationManagement from "../pages/dashboard/applicationManagement/ApplicationManagement";
+import MyApplications from "../pages/dashboard/myApplications/MyApplications";
 import MyProfile from "../pages/dashboard/myProfile/MyProfile";
+import MyReviews from "../pages/dashboard/myReviews/MyReviews";
 import PaymentCancelled from "../pages/dashboard/payment/PaymentCancelled";
 import PaymentSuccess from "../pages/dashboard/payment/PaymentSuccess";
 import ScholarshipManagement from "../pages/dashboard/scholarshipManagement/ScholarshipManagement";
@@ -95,6 +98,18 @@ const router = createBrowserRouter([
       {
         path: "application-management",
         element: <ApplicationManagement></ApplicationManagement>,
+      },
+      {
+        path: "my-application",
+        element: <MyApplications></MyApplications>,
+      },
+      {
+        path: "my-reviews",
+        element: <MyReviews></MyReviews>,
+      },
+      {
+        path: "all-reviews",
+        element: <AllReviews></AllReviews>,
       },
     ],
   },

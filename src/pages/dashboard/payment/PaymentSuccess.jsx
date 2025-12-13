@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaDollarSign } from "react-icons/fa";
 import { HiCheckCircle } from "react-icons/hi";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const PaymentSuccess = () => {

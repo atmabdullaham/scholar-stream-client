@@ -114,6 +114,39 @@ const DashboardLayout = () => {
                 </span>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="My Application"
+                to={"/dashboard/my-application"}
+              >
+                <BsFileEarmarkText size={24} />
+                <span className="is-drawer-close:hidden">My Application</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="My Reviews"
+                to={"/dashboard/my-reviews"}
+              >
+                <BsFileEarmarkText size={24} />
+                <span className="is-drawer-close:hidden">My Reviews</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                data-tip="My Reviews"
+                to={"/dashboard/all-reviews"}
+              >
+                <BsFileEarmarkText size={24} />
+                <span className="is-drawer-close:hidden">All Reviews</span>
+              </NavLink>
+            </li>
 
             {/* List item */}
             <li>

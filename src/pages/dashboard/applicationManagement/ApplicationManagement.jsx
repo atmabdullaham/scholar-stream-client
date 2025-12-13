@@ -64,10 +64,11 @@ const ApplicationManagement = () => {
   //
   const handleShowDetails = (id) => {
     console.log(id);
+    console.log("Updated");
   };
   //
-  const handleGiveFeedback = (id) => {
-    console.log(id);
+  const handleGiveFeedback = () => {
+    console.log("new");
   };
 
   const handleChangeApplicationStatus = (e, id, status) => {
@@ -111,7 +112,6 @@ const ApplicationManagement = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10">
             {/* SEARCH */}
             <div>
-              <label> Search Application by University Name, or Degree</label>
               <input
                 type="search"
                 placeholder="Search Application by University name or Degree..."
@@ -122,8 +122,7 @@ const ApplicationManagement = () => {
 
             <div>
               {/*1. item type */}
-              <fieldset className="fieldset">
-                <label> Filter by Application Status</label>
+              <fieldset className="">
                 <select
                   onChange={handleApplicationStatusFilter}
                   className="select outline-0 "
@@ -139,7 +138,6 @@ const ApplicationManagement = () => {
 
             {/* SORT */}
             <div>
-              <label> Sort By Date</label>
               <select onChange={handleSort} className="select select-bordered">
                 <option disabled selected>
                   Sort by
@@ -185,41 +183,37 @@ const ApplicationManagement = () => {
                       {s.paymentStatus}
                     </td>
 
-                    <td class="px-1 py-2 whitespace-nowrap">
+                    <td className="px-1 py-2 whitespace-nowrap space-x-2">
+                      <button className="btn btn-sm">Details</button>
+
                       <button
-                        onClick={() => handleShowDetails(s._id)}
-                        className="btn "
-                      >
-                        Details
-                      </button>
-                      <button
-                        onClick={() => handleGiveFeedback(s._id)}
-                        className="btn "
+                        onClick={() =>
+                          document.getElementById("my_modal_5").showModal()
+                        }
+                        className="btn btn-sm"
+                        type="button"
                       >
                         Feedback
                       </button>
 
-                      <button>
-                        {/*application status */}
-                        <fieldset className="fieldset">
-                          <select
-                            onChange={(e) =>
-                              handleChangeApplicationStatus(e, s._id, "nothing")
-                            }
-                            className="select outline-0 "
-                          >
-                            <option value="">Status Update</option>
-                            <option value="pending">Pending</option>
-                            <option value="processing">Processing</option>
-                            <option value="completed">Completed</option>
-                          </select>
-                        </fieldset>
-                      </button>
+                      {/* Application Status */}
+                      <select
+                        onChange={(e) =>
+                          handleChangeApplicationStatus(e, s._id, "nothing")
+                        }
+                        className="select select-sm w-fit"
+                      >
+                        <option value="">Status Update</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                      </select>
+
                       <button
                         onClick={(e) =>
                           handleChangeApplicationStatus(e, s._id, "rejected")
                         }
-                        className="btn "
+                        className="btn btn-sm btn-error"
                       >
                         Cancel
                       </button>
@@ -264,9 +258,28 @@ const ApplicationManagement = () => {
           </div>
         </div>
       </div>
-      <div>
-        <div className="overflow-x-auto"></div>
-      </div>
+
+      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <label for="Notes">
+            <span class="text-sm font-medium text-gray-700"> Notes </span>
+
+            <textarea
+              id="Notes"
+              class="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
+              rows="4"
+            ></textarea>
+          </label>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button onClick={handleGiveFeedback} className="btn">
+                Submit Feedback
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
