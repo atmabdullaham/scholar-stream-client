@@ -32,7 +32,6 @@ const ScholarshipManagement = () => {
       return res.data;
     },
   });
-  console.log(data.data);
 
   const scholarships = data?.data || [];
   const total = data?.total || 0;

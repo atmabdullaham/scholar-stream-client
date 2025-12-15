@@ -1,23 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ApplicationManagement = () => {
   const axiosSecure = useAxiosSecure();
+
+  // STATE
   const [currentPage, setCurrentPage] = useState(0);
   const [sort, setSort] = useState("createdAt");
   const [order, setOrder] = useState("desc");
   const [searchText, setSearchText] = useState("");
   const [applicationStatus, setApplicationStatus] = useState("");
+  const detailsModalRef = useRef();
+  const [details, setDetails] = useState({});
 
   const limit = 10;
 
-  // REACT QUERY CALL
+  // DATA FETCH
   const {
-    refetch,
     data = {},
     isLoading,
+    refetch,
   } = useQuery({
     queryKey: [
       "applications",
@@ -36,246 +40,303 @@ const ApplicationManagement = () => {
       return res.data;
     },
   });
-  console.log(data.data);
 
-  const scholarships = data?.data || [];
+  const applications = data?.data || [];
   const total = data?.total || 0;
   const totalPage = data?.totalPage || 0;
 
-  // SORT HANDLER
+  // HANDLERS
   const handleSort = (e) => {
     const [field, ord] = e.target.value.split("-");
     setSort(field);
     setOrder(ord);
   };
 
-  // SEARCH HANDLER
   const handleSearch = (e) => {
     setSearchText(e.target.value);
-    setCurrentPage(0); // reset pagination
-  };
-
-  // CATEGORY FILTER
-  const handleApplicationStatusFilter = (e) => {
-    setApplicationStatus(e.target.value);
-    console.log(e.target.value);
     setCurrentPage(0);
   };
-  //
-  const handleShowDetails = (id) => {
-    console.log(id);
-    console.log("Updated");
-  };
-  //
-  const handleGiveFeedback = () => {
-    console.log("new");
+
+  const handleStatusFilter = (e) => {
+    setApplicationStatus(e.target.value);
+    setCurrentPage(0);
   };
 
-  const handleChangeApplicationStatus = (e, id, status) => {
-    if (e.target.value) {
-      console.log(e.target.value);
-      status = e.target.value;
-    }
+  const handleChangeApplicationStatus = (e, id, defaultStatus) => {
+    const status = e?.target?.value || defaultStatus;
 
     Swal.fire({
       title: "Are you sure?",
-      text: `The application will marked as ${status}`,
+      text: `Application will be marked as ${status}`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: `Yes, ${status}!`,
+      confirmButtonText: "Yes, confirm!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const statusInfo = { applicationStatus: status };
-        axiosSecure.patch(`/applications/${id}`, statusInfo).then((res) => {
-          if (res.data.modifiedCount > 0) {
-            refetch();
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: `Application Status Changed  to ${status}`,
-              showConfirmButton: false,
-              timer: 3000,
-            });
-          }
-        });
+        axiosSecure
+          .patch(`/applications/${id}`, { applicationStatus: status })
+          .then((res) => {
+            if (res.data.modifiedCount > 0) {
+              refetch();
+              Swal.fire({
+                icon: "success",
+                title: "Status updated",
+                timer: 2000,
+                showConfirmButton: false,
+              });
+            }
+          });
       }
     });
   };
+
+  // show details
+  const handleShowDetails = (id) => {
+    const toShow = applications.find((application) => application._id === id);
+
+    setDetails(toShow);
+    detailsModalRef.current.showModal();
+
+    console.log(toShow);
+  };
+
   return (
-    <div>
-      <h2 className="text-3xl font-bold">Total Applications: {total}</h2>
-      <div className="py-3 w-full">
-        <div className="">
-          {/* FILTERS */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10">
-            {/* SEARCH */}
-            <div>
-              <input
-                type="search"
-                placeholder="Search Application by University name or Degree..."
-                onChange={handleSearch}
-                className="input input-bordered w-full max-w-xs"
-              />
-            </div>
+    <div className="p-6 space-y-6">
+      {/* HEADER */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <h2 className="text-2xl font-bold">Total Applications: {total}</h2>
 
-            <div>
-              {/*1. item type */}
-              <fieldset className="">
-                <select
-                  onChange={handleApplicationStatusFilter}
-                  className="select outline-0 "
-                >
-                  <option value="">Status Update</option>
-                  <option value="pending">Pending</option>
-                  <option value="processing">Processing</option>
-                  <option value="completed">Completed</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              </fieldset>
-            </div>
+        {/* FILTERS */}
+        <div className="flex flex-wrap gap-3">
+          <input
+            type="search"
+            placeholder="Search by university or degree"
+            onChange={handleSearch}
+            className="input input-bordered input-sm w-64"
+          />
 
-            {/* SORT */}
-            <div>
-              <select onChange={handleSort} className="select select-bordered">
-                <option disabled selected>
-                  Sort by
-                </option>
-                <option value="applicationDate-desc">Newest First</option>
-                <option value="applicationDate-asc">Oldest First</option>
-              </select>
-            </div>
-          </div>
+          <select
+            onChange={handleStatusFilter}
+            className="select select-bordered select-sm"
+          >
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="completed">Completed</option>
+            <option value="rejected">Rejected</option>
+          </select>
 
-          {isLoading && <p className="text-center py-10">Loading...</p>}
-
-          <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-            <table class="min-w-full divide-y-2 divide-gray-200">
-              <thead class="ltr:text-left rtl:text-right">
-                <tr class="*:font-medium *:text-gray-900">
-                  <th>#</th>
-                  <th>Applicant Name</th>
-                  <th>Applicant Email</th>
-                  <th>University Name</th>
-                  <th>Application Feedback</th>
-                  <th>Application Status</th>
-                  <th>Payment Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody class="divide-y divide-gray-200">
-                {scholarships.map((s, i) => (
-                  <tr class="*:text-gray-900 *:first:font-medium" key={s._id}>
-                    <td class="px-1 py-2 whitespace-nowrap">{i + 1}</td>
-                    <td class="px-1 py-2 whitespace-nowrap">{s.userName}</td>
-
-                    <td class="px-1 py-2 whitespace-nowrap">{s.userEmail}</td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.universityName}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">{s.feedback}</td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.applicationStatus}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.paymentStatus}
-                    </td>
-
-                    <td className="px-1 py-2 whitespace-nowrap space-x-2">
-                      <button className="btn btn-sm">Details</button>
-
-                      <button
-                        onClick={() =>
-                          document.getElementById("my_modal_5").showModal()
-                        }
-                        className="btn btn-sm"
-                        type="button"
-                      >
-                        Feedback
-                      </button>
-
-                      {/* Application Status */}
-                      <select
-                        onChange={(e) =>
-                          handleChangeApplicationStatus(e, s._id, "nothing")
-                        }
-                        className="select select-sm w-fit"
-                      >
-                        <option value="">Status Update</option>
-                        <option value="pending">Pending</option>
-                        <option value="processing">Processing</option>
-                        <option value="completed">Completed</option>
-                      </select>
-
-                      <button
-                        onClick={(e) =>
-                          handleChangeApplicationStatus(e, s._id, "rejected")
-                        }
-                        className="btn btn-sm btn-error"
-                      >
-                        Cancel
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* PAGINATION */}
-          <div className="flex justify-center gap-2 py-10">
-            {currentPage > 0 && (
-              <button
-                className="btn"
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-            )}
-
-            {[...Array(totalPage).keys()].map((num) => (
-              <button
-                key={num}
-                onClick={() => setCurrentPage(num)}
-                className={`btn ${
-                  num === currentPage ? "bg-teal-600 text-white" : ""
-                }`}
-              >
-                {num + 1}
-              </button>
-            ))}
-
-            {currentPage < totalPage - 1 && (
-              <button
-                className="btn"
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            )}
-          </div>
+          <select
+            onChange={handleSort}
+            className="select select-bordered select-sm"
+          >
+            <option disabled selected>
+              Sort By
+            </option>
+            <option value="applicationDate-desc">Newest First</option>
+            <option value="applicationDate-asc">Oldest First</option>
+          </select>
         </div>
       </div>
 
-      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <label for="Notes">
-            <span class="text-sm font-medium text-gray-700"> Notes </span>
+      {/* TABLE */}
+      <div className="overflow-x-auto border rounded-lg">
+        {isLoading ? (
+          <p className="text-center py-10">Loading...</p>
+        ) : (
+          <table className="table table-zebra">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>University</th>
+                <th>Feedback</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-            <textarea
-              id="Notes"
-              class="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
-              rows="4"
-            ></textarea>
-          </label>
+            <tbody>
+              {applications.map((app, index) => (
+                <tr key={app._id}>
+                  <td>{index + 1}</td>
+                  <td>{app.userName}</td>
+                  <td>{app.userEmail}</td>
+                  <td>{app.universityName}</td>
+                  <td>{app.feedback || "-"}</td>
+                  <td>
+                    <span className="badge badge-outline">
+                      {app.applicationStatus}
+                    </span>
+                  </td>
+                  <td>{app.paymentStatus}</td>
+
+                  <td className="flex gap-2">
+                    <button
+                      onClick={() => handleShowDetails(app._id)}
+                      className="btn btn-xs btn-outline"
+                    >
+                      Details
+                    </button>
+
+                    <select
+                      onChange={(e) =>
+                        handleChangeApplicationStatus(
+                          e,
+                          app._id,
+                          app.applicationStatus
+                        )
+                      }
+                      className="select select-xs"
+                    >
+                      <option value="">Update</option>
+                      <option value="pending">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="completed">Completed</option>
+                    </select>
+
+                    <button
+                      onClick={() =>
+                        handleChangeApplicationStatus(null, app._id, "rejected")
+                      }
+                      className="btn btn-xs btn-error"
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      <div className="flex justify-center gap-2">
+        <button
+          disabled={currentPage === 0}
+          className="btn btn-sm"
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Prev
+        </button>
+
+        {[...Array(totalPage).keys()].map((num) => (
+          <button
+            key={num}
+            onClick={() => setCurrentPage(num)}
+            className={`btn btn-sm ${num === currentPage ? "btn-primary" : ""}`}
+          >
+            {num + 1}
+          </button>
+        ))}
+
+        <button
+          disabled={currentPage === totalPage - 1}
+          className="btn btn-sm"
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
+
+      <dialog
+        ref={detailsModalRef}
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box">
+          <div className="flow-root">
+            <dl className="-my-3 divide-y divide-gray-200 text-sm">
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Applicant Name</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.userName || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Applicant Email</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.userEmail || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">University Name</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.universityName || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Degree</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.degree || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">
+                  Scholarship Category
+                </dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.scholarshipCategory || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">
+                  Application Status
+                </dt>
+                <dd className="text-gray-700 sm:col-span-2 capitalize">
+                  {details?.applicationStatus || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Payment Status</dt>
+                <dd className="text-gray-700 sm:col-span-2 capitalize">
+                  {details?.paymentStatus || "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Application Fees</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  ৳{details?.applicationFees ?? 0}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Service Charge</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  ৳{details?.serviceCharge ?? 0}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Application Date</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.applicationDate
+                    ? new Date(details.applicationDate).toLocaleString()
+                    : "—"}
+                </dd>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                <dt className="font-medium text-gray-900">Feedback</dt>
+                <dd className="text-gray-700 sm:col-span-2">
+                  {details?.feedback || "No feedback provided"}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
-              <button onClick={handleGiveFeedback} className="btn">
-                Submit Feedback
-              </button>
+              <button className="btn">Close</button>
             </form>
           </div>
         </div>
