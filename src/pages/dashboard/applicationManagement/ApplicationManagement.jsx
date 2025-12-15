@@ -14,6 +14,9 @@ const ApplicationManagement = () => {
   const [applicationStatus, setApplicationStatus] = useState("");
   const detailsModalRef = useRef();
   const [details, setDetails] = useState({});
+  const feedbackModalRef = useRef();
+  const feedbackRef = useRef();
+  const [feedbackId, setFeedbackId] = useState();
 
   const limit = 10;
 
@@ -99,6 +102,38 @@ const ApplicationManagement = () => {
 
     console.log(toShow);
   };
+  // handle give feedback
+  const handleOpenFeedbackModal = (id) => {
+    feedbackModalRef.current.showModal();
+    setFeedbackId(id);
+  };
+  const handleSubmitFeedback = async () => {
+    const feedback = feedbackRef.current.value;
+    if (!feedback) {
+      Swal.fire({
+        icon: "warning",
+        title: "No feedback added",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
+    if (feedback) {
+      await axiosSecure
+        .patch(`/applications/${feedbackId}`, { feedback: feedback })
+        .then((res) => {
+          if (res.data.modifiedCount > 0) {
+            feedbackRef.current.value = "";
+            refetch();
+            Swal.fire({
+              icon: "success",
+              title: "Feedback added",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          }
+        });
+    }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -179,6 +214,12 @@ const ApplicationManagement = () => {
                       className="btn btn-xs btn-outline"
                     >
                       Details
+                    </button>
+                    <button
+                      onClick={() => handleOpenFeedbackModal(app._id)}
+                      className="btn btn-xs btn-outline"
+                    >
+                      Feedback
                     </button>
 
                     <select
@@ -337,6 +378,26 @@ const ApplicationManagement = () => {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      <dialog
+        ref={feedbackModalRef}
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box">
+          <textarea
+            ref={feedbackRef}
+            className="textarea textarea-bordered w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-teal-50"
+            placeholder="Write your feedback here..."
+          ></textarea>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button onClick={handleSubmitFeedback} className="btn">
+                Submit Feedback
+              </button>
             </form>
           </div>
         </div>
