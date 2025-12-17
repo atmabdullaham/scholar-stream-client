@@ -4,10 +4,12 @@ import { FcManager } from "react-icons/fc";
 import { IoSchoolSharp } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
 import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
-import { VscSettings } from "react-icons/vsc";
 import { Link, NavLink, Outlet } from "react-router";
+import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
+  const { role } = useRole();
+  console.log(role);
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -24,7 +26,7 @@ const DashboardLayout = () => {
             <TbLayoutSidebarLeftExpandFilled color="#ffffff" size={24} />
           </label>
           <h2 className="px-4 text-2xl font-bold text-white">
-            Scholar Stream Dashboard
+            {role.charAt(0).toUpperCase() + role.slice(1)} Dashboard
           </h2>
         </nav>
         {/* Page content here */}
@@ -66,99 +68,109 @@ const DashboardLayout = () => {
                 <span className="is-drawer-close:hidden">My Profile</span>
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
+            {role === "admin" && (
+              <>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
                 is-drawer-close:tooltip-right"
-                data-tip="Users Management"
-                to={"/dashboard/users-management"}
-              >
-                <FaUsersCog size={24} />
-                <span className="is-drawer-close:hidden">Users Management</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
+                    data-tip="Users Management"
+                    to={"/dashboard/users-management"}
+                  >
+                    <FaUsersCog size={24} />
+                    <span className="is-drawer-close:hidden">
+                      Users Management
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
                 is-drawer-close:tooltip-right"
-                data-tip="Add Scholarship"
-                to={"/dashboard/add-scholarship"}
-              >
-                <IoSchoolSharp size={24} />
-                <span className="is-drawer-close:hidden">Add Scholarship</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
+                    data-tip="Add Scholarship"
+                    to={"/dashboard/add-scholarship"}
+                  >
+                    <IoSchoolSharp size={24} />
+                    <span className="is-drawer-close:hidden">
+                      Add Scholarship
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
                 is-drawer-close:tooltip-right"
-                data-tip="Scholarship Management"
-                to={"/dashboard/scholarship-management"}
-              >
-                <FcManager size={24}></FcManager>
-                <span className="is-drawer-close:hidden">
-                  ScholarshipManagement
-                </span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
-                is-drawer-close:tooltip-right"
-                data-tip="Application Management"
-                to={"/dashboard/application-management"}
-              >
-                <BsFileEarmarkText size={24} />
-                <span className="is-drawer-close:hidden">
-                  Application Management
-                </span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
-                is-drawer-close:tooltip-right"
-                data-tip="My Application"
-                to={"/dashboard/my-application"}
-              >
-                <BsFileEarmarkText size={24} />
-                <span className="is-drawer-close:hidden">My Application</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
-                is-drawer-close:tooltip-right"
-                data-tip="My Reviews"
-                to={"/dashboard/my-reviews"}
-              >
-                <BsFileEarmarkText size={24} />
-                <span className="is-drawer-close:hidden">My Reviews</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip
-                is-drawer-close:tooltip-right"
-                data-tip="My Reviews"
-                to={"/dashboard/all-reviews"}
-              >
-                <BsFileEarmarkText size={24} />
-                <span className="is-drawer-close:hidden">All Reviews</span>
-              </NavLink>
-            </li>
+                    data-tip="Scholarship Management"
+                    to={"/dashboard/scholarship-management"}
+                  >
+                    <FcManager size={24}></FcManager>
+                    <span className="is-drawer-close:hidden">
+                      ScholarshipManagement
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
 
-            {/* List item */}
-            <li>
-              <button
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Settings"
-              >
-                {/* Settings icon */}
-                <VscSettings size={24} />
-                <span className="is-drawer-close:hidden">Settings</span>
-              </button>
-            </li>
+            {/* moderator */}
+            {role === "moderator" && (
+              <>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                    data-tip="Application Management"
+                    to={"/dashboard/application-management"}
+                  >
+                    <BsFileEarmarkText size={24} />
+                    <span className="is-drawer-close:hidden">
+                      Application Management
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                    data-tip="Review Management"
+                    to={"/dashboard/all-reviews"}
+                  >
+                    <BsFileEarmarkText size={24} />
+                    <span className="is-drawer-close:hidden">
+                      Review Management
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+            {role === "student" && (
+              <>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                    data-tip="My Application"
+                    to={"/dashboard/my-application"}
+                  >
+                    <BsFileEarmarkText size={24} />
+                    <span className="is-drawer-close:hidden">
+                      My Application
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip
+                is-drawer-close:tooltip-right"
+                    data-tip="My Reviews"
+                    to={"/dashboard/my-reviews"}
+                  >
+                    <BsFileEarmarkText size={24} />
+                    <span className="is-drawer-close:hidden">My Reviews</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

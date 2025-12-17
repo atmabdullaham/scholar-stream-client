@@ -19,7 +19,10 @@ import UsersManagement from "../pages/dashboard/userManagement/UserManagement";
 import Error from "../pages/error/Error";
 import Home from "../pages/home/Home";
 import ScholarshipDetails from "../pages/scholarshipDetails/ScholarshipDetails";
+import AdminRoute from "./AdminRoutes";
+import ModaretorRoutes from "./ModaretorRoutes";
 import PrivateRoutes from "./PrivateRoutes";
+import StudentRoutes from "./StudentRoutes";
 
 const router = createBrowserRouter([
   {
@@ -71,21 +74,37 @@ const router = createBrowserRouter([
       },
       {
         path: "users-management",
-        element: <UsersManagement></UsersManagement>,
+        element: (
+          <AdminRoute>
+            <UsersManagement></UsersManagement>
+          </AdminRoute>
+        ),
       },
       {
         path: "add-scholarship",
         loader: () => fetch("/countries.json"),
-        element: <AddScholarship></AddScholarship>,
+        element: (
+          <AdminRoute>
+            <AddScholarship></AddScholarship>
+          </AdminRoute>
+        ),
       },
       {
         path: "scholarship-management",
-        element: <ScholarshipManagement></ScholarshipManagement>,
+        element: (
+          <AdminRoute>
+            <ScholarshipManagement></ScholarshipManagement>
+          </AdminRoute>
+        ),
       },
       {
         path: "update-scholarship/:id",
         loader: () => fetch("/countries.json"),
-        element: <UpdateScholarship></UpdateScholarship>,
+        element: (
+          <AdminRoute>
+            <UpdateScholarship></UpdateScholarship>
+          </AdminRoute>
+        ),
       },
       {
         path: "payment-success",
@@ -95,21 +114,35 @@ const router = createBrowserRouter([
         path: "payment-cancelled",
         element: <PaymentCancelled></PaymentCancelled>,
       },
+      // modarator routes
       {
         path: "application-management",
-        element: <ApplicationManagement></ApplicationManagement>,
-      },
-      {
-        path: "my-application",
-        element: <MyApplications></MyApplications>,
-      },
-      {
-        path: "my-reviews",
-        element: <MyReviews></MyReviews>,
+        element: (
+          <ModaretorRoutes>
+            <ApplicationManagement></ApplicationManagement>
+          </ModaretorRoutes>
+        ),
       },
       {
         path: "all-reviews",
         element: <AllReviews></AllReviews>,
+      },
+      // Student routes
+      {
+        path: "my-application",
+        element: (
+          <StudentRoutes>
+            <MyApplications></MyApplications>
+          </StudentRoutes>
+        ),
+      },
+      {
+        path: "my-reviews",
+        element: (
+          <StudentRoutes>
+            <MyReviews></MyReviews>
+          </StudentRoutes>
+        ),
       },
     ],
   },

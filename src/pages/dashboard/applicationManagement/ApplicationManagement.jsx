@@ -244,7 +244,7 @@ const ApplicationManagement = () => {
                       }
                       className="btn btn-xs btn-error"
                     >
-                      Reject
+                      Cancel
                     </button>
                   </td>
                 </tr>
