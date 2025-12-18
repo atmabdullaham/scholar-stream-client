@@ -7,6 +7,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import AddScholarship from "../pages/dashboard/addScholarship/AddScholarship";
 import AllReviews from "../pages/dashboard/allReviews/AllReviews";
+import Analytics from "../pages/dashboard/analytics/Analytics";
 import ApplicationManagement from "../pages/dashboard/applicationManagement/ApplicationManagement";
 import MyApplications from "../pages/dashboard/myApplications/MyApplications";
 import MyProfile from "../pages/dashboard/myProfile/MyProfile";
@@ -69,7 +70,7 @@ const router = createBrowserRouter([
     Component: DashboardLayout,
     children: [
       {
-        path: "my-profile",
+        index: true,
         element: <MyProfile></MyProfile>,
       },
       {
@@ -103,6 +104,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <UpdateScholarship></UpdateScholarship>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "analytics",
+        element: (
+          <AdminRoute>
+            <Analytics></Analytics>
           </AdminRoute>
         ),
       },
