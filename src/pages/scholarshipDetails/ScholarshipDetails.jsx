@@ -1,4 +1,5 @@
 import { Image } from "@imagekit/react";
+import { Rating } from "@smastrom/react-rating";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -13,6 +14,11 @@ import { FiLayers } from "react-icons/fi";
 import { MdCategory, MdSchool } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Autoplay, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import ScholarshipReviewCard from "../../components/ScholarshipReviewCard";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
@@ -31,6 +37,21 @@ const ScholarshipDetails = () => {
       return res.data;
     },
   });
+  const { data: reviews = [] } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/reviews/${id}/all`);
+      return res.data;
+    },
+  });
+  const { data: reviewStats = {} } = useQuery({
+    queryKey: ["review-average", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/reviews/${id}/average`);
+      return res.data;
+    },
+  });
+  const { averageRating = 0, totalReviews = 0 } = reviewStats;
   const {
     _id,
     scholarshipName,
@@ -246,8 +267,69 @@ const ScholarshipDetails = () => {
 
       {/* Reviews Section */}
       <div className="mt-14">
-        <h2 className="text-2xl font-bold text-teal-700">Reviews</h2>
-        <p className="text-gray-500 mt-2">No reviews yet.</p>
+        {totalReviews !== 0 && (
+          <h2 className="text-2xl font-bold text-teal-700">Reviews</h2>
+        )}
+        {totalReviews !== 0 && (
+          <div className="mt-6 flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm border">
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-bold text-yellow-500">
+                {averageRating}
+              </span>
+              <span className="text-gray-500">/ 5</span>
+            </div>
+
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <Rating
+                  style={{ maxWidth: 120 }}
+                  value={averageRating}
+                  readOnly
+                />
+                <span className="text-sm text-gray-500">
+                  ({totalReviews} reviews)
+                </span>
+              </div>
+
+              <p className="text-sm text-gray-500 mt-1">
+                Average student rating for this scholarship
+              </p>
+            </div>
+          </div>
+        )}
+        <div className="mt-14">
+          <h2 className="text-2xl font-bold text-teal-700 mb-6">
+            Student Reviews
+          </h2>
+
+          {reviews.length === 0 ? (
+            <p className="text-gray-500">No reviews yet.</p>
+          ) : (
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              autoplay={{ delay: 3500, disableOnInteraction: false }}
+              pagination={{ clickable: true }}
+              spaceBetween={20}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                },
+                768: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                },
+              }}
+            >
+              {reviews.map((review) => (
+                <SwiperSlide key={review._id}>
+                  <ScholarshipReviewCard review={review} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
+        </div>
       </div>
     </div>
   );
