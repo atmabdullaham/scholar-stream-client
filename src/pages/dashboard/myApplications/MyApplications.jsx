@@ -1,5 +1,8 @@
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -9,176 +12,151 @@ const MyApplications = () => {
   const { user } = useAuth();
 
   // STATE
-  const [currentPage, setCurrentPage] = useState(0);
-  const [sort, setSort] = useState("createdAt");
-  const [order, setOrder] = useState("desc");
-  const [searchText, setSearchText] = useState("");
-  const [applicationStatus, setApplicationStatus] = useState("");
+
   const detailsModalRef = useRef();
   const [details, setDetails] = useState({});
-  const feedbackModalRef = useRef();
-  const feedbackRef = useRef();
-  const [feedbackId, setFeedbackId] = useState();
+  const reviewModalRef = useRef(null);
+  const [review, setReview] = useState(null);
+  const [rating, setRating] = useState(0);
+  const { register, handleSubmit, reset } = useForm();
 
-  const limit = 10;
   const email = user?.email;
-  console.log(email);
 
   // DATA FETCH
   const {
-    data = {},
+    data: applications = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: [
-      "applications",
-      currentPage,
-      sort,
-      order,
-      searchText,
-      applicationStatus,
-      email,
-    ],
+    queryKey: ["my-applications", email],
     enabled: !!email,
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/applications?email=${email}&limit=${limit}&skip=${
-          currentPage * limit
-        }&sort=${sort}&order=${order}&search=${searchText}&applicationStatus=${applicationStatus}`
-      );
+      const res = await axiosSecure.get(`/my-applications/${email}`);
       return res.data;
     },
   });
 
-  const applications = data?.data || [];
-  const total = data?.total || 0;
-  const totalPage = data?.totalPage || 0;
-  console.log(applications);
-
-  // HANDLERS
-  const handleSort = (e) => {
-    const [field, ord] = e.target.value.split("-");
-    setSort(field);
-    setOrder(ord);
-  };
-
-  const handleSearch = (e) => {
-    setSearchText(e.target.value);
-    setCurrentPage(0);
-  };
-
-  const handleStatusFilter = (e) => {
-    setApplicationStatus(e.target.value);
-    setCurrentPage(0);
-  };
-
-  const handleChangeApplicationStatus = (e, id, defaultStatus) => {
-    const status = e?.target?.value || defaultStatus;
-
-    Swal.fire({
-      title: "Are you sure?",
-      text: `Application will be marked as ${status}`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, confirm!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure
-          .patch(`/applications/${id}`, { applicationStatus: status })
-          .then((res) => {
-            if (res.data.modifiedCount > 0) {
-              refetch();
-              Swal.fire({
-                icon: "success",
-                title: "Status updated",
-                timer: 2000,
-                showConfirmButton: false,
-              });
-            }
-          });
-      }
-    });
-  };
-
   // show details
   const handleShowDetails = (id) => {
     const toShow = applications.find((application) => application._id === id);
-
     setDetails(toShow);
     detailsModalRef.current.showModal();
+  };
 
-    console.log(toShow);
+  // handle payment if unpaid
+  const handlePayment = (app) => {
+    const totalPayable = app.applicationFees + app.serviceCharge;
+
+    Swal.fire({
+      title: "Are you want to proceed?",
+      text: `Application Fee:${app.applicationFees}$ + Service Charge: ${app.serviceCharge}$. So, Total payable is ${totalPayable}$ `,
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm Pay",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await axiosSecure.post("/create-checkout-session", app);
+        window.location.assign(res.data.url);
+      }
+    });
   };
-  // handle give feedback
-  const handleOpenFeedbackModal = (id) => {
-    feedbackModalRef.current.showModal();
-    setFeedbackId(id);
+  // handle give review
+  const handleOpenReviewModal = (id) => {
+    const toShow = applications.find((application) => application._id === id);
+
+    if (!toShow) return;
+
+    setReview(toShow);
+
+    // open modal AFTER state set
+    setTimeout(() => {
+      reviewModalRef.current?.showModal();
+    }, 0);
   };
-  const handleSubmitFeedback = async () => {
-    const feedback = feedbackRef.current.value;
-    if (!feedback) {
+  const handleReviewModalClose = () => {
+    reviewModalRef.current?.close();
+  };
+
+  // give feedback
+  const handleSubmitReview = async (data) => {
+    if (!review || rating === 0) {
       Swal.fire({
-        icon: "warning",
-        title: "No feedback added",
+        icon: "info",
+        position: "top-end",
+        title: "Rating Required",
+        text: "Please give a rating before submitting your review",
         timer: 2000,
         showConfirmButton: false,
       });
+      return;
     }
-    if (feedback) {
-      await axiosSecure
-        .patch(`/applications/${feedbackId}`, { feedback: feedback })
-        .then((res) => {
-          if (res.data.modifiedCount > 0) {
-            feedbackRef.current.value = "";
+    const reviewInfo = {
+      scholarshipId: review.scholarshipId,
+      universityName: review.universityName,
+      userName: review.userName,
+      userEmail: user.email,
+      userImage: user.photoURL,
+      ratingPoint: rating,
+      reviewComment: data.comment,
+    };
+
+    try {
+      const res = await axiosSecure.post("/reviews", reviewInfo);
+
+      if (res.data.insertedId) {
+        Swal.fire("Success!", "Review submitted!", "success");
+        reset();
+        setRating(0);
+        handleReviewModalClose();
+      }
+    } catch (error) {
+      if (error.response?.status === 409) {
+        Swal.fire("Already Submitted", error.response.data.message, "info");
+        reset();
+        setRating(0);
+        handleReviewModalClose();
+      } else {
+        Swal.fire("Error", "Failed to submit review", "error");
+      }
+    }
+  };
+  // delete application
+  const handleDeleteApplication = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "The application will deleted permanently",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/my-applications/${id}`).then((res) => {
+          if (res.data.deletedCount) {
             refetch();
             Swal.fire({
+              position: "top-end",
               icon: "success",
-              title: "Feedback added",
-              timer: 2000,
+              title: `application deleted`,
               showConfirmButton: false,
+              timer: 3000,
             });
           }
         });
-    }
+      }
+    });
   };
 
   return (
     <div className="p-6 space-y-6">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <h2 className="text-2xl font-bold">Total Applications: {total}</h2>
-
-        {/* FILTERS */}
-        <div className="flex flex-wrap gap-3">
-          <input
-            type="search"
-            placeholder="Search by university or degree"
-            onChange={handleSearch}
-            className="input input-bordered input-sm w-64"
-          />
-
-          <select
-            onChange={handleStatusFilter}
-            className="select select-bordered select-sm"
-          >
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="completed">Completed</option>
-            <option value="rejected">Rejected</option>
-          </select>
-
-          <select
-            onChange={handleSort}
-            className="select select-bordered select-sm"
-          >
-            <option disabled selected>
-              Sort By
-            </option>
-            <option value="applicationDate-desc">Newest First</option>
-            <option value="applicationDate-asc">Oldest First</option>
-          </select>
-        </div>
+        <h2 className="text-2xl font-bold">
+          My Applications:{applications.length}
+        </h2>
       </div>
 
       {/* TABLE */}
@@ -205,9 +183,13 @@ const MyApplications = () => {
                 <tr key={app._id}>
                   <td>{index + 1}</td>
                   <td>{app.universityName}</td>
-                  <td>{app.userEmail}</td>
+                  <td>
+                    {app.scholarshipDetails.universityCity}
+                    {","}
+                    {app.scholarshipDetails.universityCountry}
+                  </td>
                   <td>{app.feedback || "-"} </td>
-                  <td>{"-"}</td>
+                  <td>{app.scholarshipDetails.subjectCategory}</td>
                   <td>{app.applicationFees}</td>
 
                   <td>{app.applicationStatus}</td>
@@ -221,7 +203,7 @@ const MyApplications = () => {
                     </button>
                     {app.applicationStatus === "pending" && (
                       <button
-                        onClick={() => handleOpenFeedbackModal(app._id)}
+                        onClick={() => handleOpenReviewModal(app._id)}
                         className="btn btn-xs btn-outline"
                       >
                         Edit
@@ -229,18 +211,17 @@ const MyApplications = () => {
                     )}
                     {app.paymentStatus === "unpaid" &&
                       app.applicationStatus === "pending" && (
-                        <button className="btn btn-xs btn-outline">pay</button>
+                        <button
+                          onClick={() => handlePayment(app)}
+                          className="btn btn-xs btn-outline"
+                        >
+                          pay
+                        </button>
                       )}
 
                     {app.applicationStatus === "pending" && (
                       <button
-                        onClick={() =>
-                          handleChangeApplicationStatus(
-                            null,
-                            app._id,
-                            "rejected"
-                          )
-                        }
+                        onClick={() => handleDeleteApplication(app._id)}
                         className="btn btn-xs btn-error"
                       >
                         Delete
@@ -248,14 +229,8 @@ const MyApplications = () => {
                     )}
                     {app.applicationStatus === "completed" && (
                       <button
-                        onClick={() =>
-                          handleChangeApplicationStatus(
-                            null,
-                            app._id,
-                            "rejected"
-                          )
-                        }
-                        className="btn btn-xs btn-error"
+                        onClick={() => handleOpenReviewModal(app._id)}
+                        className="btn btn-xs btn-success"
                       >
                         Add Review
                       </button>
@@ -267,40 +242,16 @@ const MyApplications = () => {
           </table>
         )}
       </div>
-
-      <div className="flex justify-center gap-2">
-        <button
-          disabled={currentPage === 0}
-          className="btn btn-sm"
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Prev
-        </button>
-
-        {[...Array(totalPage).keys()].map((num) => (
-          <button
-            key={num}
-            onClick={() => setCurrentPage(num)}
-            className={`btn btn-sm ${num === currentPage ? "btn-primary" : ""}`}
-          >
-            {num + 1}
-          </button>
-        ))}
-
-        <button
-          disabled={currentPage === totalPage - 1}
-          className="btn btn-sm"
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button>
-      </div>
+      {/* details modal */}
 
       <dialog
         ref={detailsModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
         <div className="modal-box">
+          <h3 className="text-xl font-semibold text-center pb-4">
+            Application Details
+          </h3>
           <div className="flow-root">
             <dl className="-my-3 divide-y divide-gray-200 text-sm">
               <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
@@ -397,23 +348,51 @@ const MyApplications = () => {
         </div>
       </dialog>
       <dialog
-        ref={feedbackModalRef}
+        ref={reviewModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
         <div className="modal-box">
-          <textarea
-            ref={feedbackRef}
-            className="textarea textarea-bordered w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-teal-50"
-            placeholder="Write your feedback here..."
-          ></textarea>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button onClick={handleSubmitFeedback} className="btn">
-                Submit Feedback
+          <h2
+            id="modalTitle"
+            className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-2xl"
+          >
+            Rating and Review
+          </h2>
+          <form onSubmit={handleSubmit(handleSubmitReview)} className="pt-10">
+            <div className="mb-4">
+              <h3 className="mb-1">Your Rating:</h3>
+              <Rating
+                style={{ maxWidth: 150 }}
+                value={rating}
+                onChange={setRating}
+                fractions={10}
+              />
+            </div>
+
+            <textarea
+              {...register("comment", { required: true })}
+              className="textarea mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
+              rows="4"
+              placeholder="Write your review..."
+            ></textarea>
+
+            <footer className="mt-6 flex justify-end gap-2">
+              <button
+                onClick={handleReviewModalClose}
+                type="button"
+                className="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+              >
+                Cancel
               </button>
-            </form>
-          </div>
+
+              <button
+                type="submit"
+                className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                Submit Review
+              </button>
+            </footer>
+          </form>
         </div>
       </dialog>
     </div>

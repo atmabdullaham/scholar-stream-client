@@ -287,6 +287,7 @@ const ApplicationManagement = () => {
         className="modal modal-bottom sm:modal-middle"
       >
         <div className="modal-box">
+          <h3>Application Details</h3>
           <div className="flow-root">
             <dl className="-my-3 divide-y divide-gray-200 text-sm">
               <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
