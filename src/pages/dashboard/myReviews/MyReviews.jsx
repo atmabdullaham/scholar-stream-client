@@ -1,5 +1,8 @@
+import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { useQuery } from "@tanstack/react-query";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -7,6 +10,10 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const MyReviews = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const reviewModalRef = useRef(null);
+  const [review, setReview] = useState(null);
+  const [rating, setRating] = useState(0);
+  const { register, handleSubmit, reset, setValue } = useForm();
   const email = user?.email;
   const {
     data: reviews = [],
@@ -20,6 +27,70 @@ const MyReviews = () => {
       return res.data;
     },
   });
+
+  // handle give review
+  const handleOpenReviewModal = (id) => {
+    const toShow = reviews.find((r) => r._id === id);
+    if (!toShow) return;
+    setReview(toShow);
+    setRating(toShow.ratingPoint);
+    setValue("comment", toShow.reviewComment);
+
+    setTimeout(() => {
+      reviewModalRef.current?.showModal();
+    }, 0);
+  };
+  const handleReviewModalClose = () => {
+    reviewModalRef.current?.close();
+    setReview(null);
+    setRating(0);
+    reset();
+  };
+
+  const handleSubmitReview = async (data) => {
+    if (!review || rating === 0) {
+      Swal.fire({
+        icon: "info",
+        title: "Rating Required",
+        text: "Please give a rating before updating",
+      });
+
+      return;
+    }
+
+    const isRatingSame = rating === review.ratingPoint;
+    const isCommentSame = data.comment === review.reviewComment;
+
+    if (isRatingSame && isCommentSame) {
+      Swal.fire({
+        icon: "info",
+        title: "No Changes Found",
+        text: "Did not change anything",
+      });
+      handleReviewModalClose();
+      return;
+    }
+
+    const updatedReview = {
+      ratingPoint: rating,
+      reviewComment: data.comment,
+    };
+
+    try {
+      const res = await axiosSecure.patch(
+        `/reviews/${review._id}`,
+        updatedReview
+      );
+
+      if (res.data.modifiedCount) {
+        Swal.fire("Success!", "Review updated successfully", "success");
+        refetch();
+        handleReviewModalClose();
+      }
+    } catch (error) {
+      Swal.fire("Error", "Failed to update review", "error");
+    }
+  };
 
   const handleDeleteReview = (id) => {
     Swal.fire({
@@ -77,7 +148,7 @@ const MyReviews = () => {
                 <td>{r.ratingPoint}</td>
                 <td>
                   <button
-                    onClick={() => handleOpenReviewModal(app._id)}
+                    onClick={() => handleOpenReviewModal(r._id)}
                     className="btn btn-xs btn-success"
                   >
                     Edit Review
@@ -94,6 +165,54 @@ const MyReviews = () => {
           </tbody>
         </table>
       </div>
+      <dialog
+        ref={reviewModalRef}
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box">
+          <h2
+            id="modalTitle"
+            className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-2xl"
+          >
+            Rating and Review
+          </h2>
+          <form onSubmit={handleSubmit(handleSubmitReview)} className="pt-10">
+            <div className="mb-4">
+              <h3 className="mb-1">Your Rating:</h3>
+              <Rating
+                style={{ maxWidth: 150 }}
+                value={rating}
+                onChange={setRating}
+                fractions={10}
+              />
+            </div>
+
+            <textarea
+              {...register("comment", { required: true })}
+              className="textarea mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
+              rows="4"
+              placeholder="Write your review..."
+            ></textarea>
+
+            <footer className="mt-6 flex justify-end gap-2">
+              <button
+                onClick={handleReviewModalClose}
+                type="button"
+                className="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                Update Review
+              </button>
+            </footer>
+          </form>
+        </div>
+      </dialog>
     </div>
   );
 };
