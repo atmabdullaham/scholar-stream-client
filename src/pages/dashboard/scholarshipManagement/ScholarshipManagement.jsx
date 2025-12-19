@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -9,12 +10,10 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const ScholarshipManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [currentPage, setCurrentPage] = useState(0);
-  const [sort, setSort] = useState("createdAt");
-  const [order, setOrder] = useState("desc");
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
 
-  const limit = 8;
+  const limit = 15;
 
   // REACT QUERY CALL
   const {
@@ -22,12 +21,12 @@ const ScholarshipManagement = () => {
     data = {},
     isLoading,
   } = useQuery({
-    queryKey: ["scholarships", currentPage, sort, order, searchText, category],
+    queryKey: ["scholarships", currentPage, searchText, category],
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/scholarships?limit=${limit}&skip=${
           currentPage * limit
-        }&sort=${sort}&order=${order}&search=${searchText}&category=${category}`
+        }&search=${searchText}&category=${category}`
       );
       return res.data;
     },
@@ -36,13 +35,6 @@ const ScholarshipManagement = () => {
   const scholarships = data?.data || [];
   const total = data?.total || 0;
   const totalPage = data?.totalPage || 0;
-
-  // SORT HANDLER
-  const handleSort = (e) => {
-    const [field, ord] = e.target.value.split("-");
-    setSort(field);
-    setOrder(ord);
-  };
 
   // SEARCH HANDLER
   const handleSearch = (e) => {
@@ -85,111 +77,68 @@ const ScholarshipManagement = () => {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold">Total Scholarships: {total}</h2>
       <div className="py-3 w-full">
         <div className="">
-          {/* FILTERS */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-10">
-            {/* SEARCH */}
-            <input
-              type="search"
-              placeholder="Search product..."
-              onChange={handleSearch}
-              className="input input-bordered w-full max-w-xs"
-            />
-            <div>
-              {/*1. item type */}
-              <fieldset className="fieldset">
-                <select onClick={handleCategory} className="select outline-0 ">
-                  <option value="">Select Category</option>
-                  <option value="Full fund">Full fund</option>
-                  <option value="Partial">Partial</option>
-                  <option value="Self fund">Self fund</option>
-                </select>
-              </fieldset>
-            </div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <h2 className="text-3xl font-bold">Total Scholarships: {total}</h2>
 
-            {/* SORT */}
-            <select onChange={handleSort} className="select select-bordered">
-              <option disabled selected>
-                Sort by
-              </option>
-              <option value="price-asc">Price: Low → High</option>
-              <option value="price-desc">Price: High → Low</option>
-              <option value="weight-asc">Weight: Low → High</option>
-              <option value="weight-desc">Weight: High → Low</option>
-              <option value="createdAt-desc">Newest First</option>
-              <option value="createdAt-asc">Oldest First</option>
-            </select>
+            {/* FILTERS */}
+            <div className="flex flex-wrap gap-3">
+              <input
+                type="search"
+                placeholder="Search product..."
+                onChange={handleSearch}
+                className="input input-bordered w-full max-w-xs"
+              />
+
+              <select onClick={handleCategory} className="select outline-0 ">
+                <option value="">Select Category</option>
+                <option value="Full fund">Full fund</option>
+                <option value="Partial">Partial</option>
+                <option value="Self fund">Self fund</option>
+              </select>
+            </div>
           </div>
 
           {isLoading && <p className="text-center py-10">Loading...</p>}
-
-          <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-            <table class="min-w-full divide-y-2 divide-gray-200">
-              <thead class="ltr:text-left rtl:text-right">
-                <tr class="*:font-medium *:text-gray-900">
-                  <th>#</th>
-                  <th>
-                    Scholarship Name
-                    <br />
-                    University Name
-                  </th>
+          <div className="overflow-x-auto">
+            <table className="table table-xs">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Scholarship Name</th>
+                  <th>University Name</th>
                   <th>Location</th>
                   <th>Degree</th>
-                  <th>Scholarship Category </th>
-                  <th>Subject Category</th>
+                  <th>Category</th>
+                  <th>Subject</th>
                   <th>Ranking</th>
-                  <th>Tution Fees</th>
                   <th>Deadline</th>
                   <th>Application Fees</th>
-                  <th>Service Charge</th>
+                  <th>Charge</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-
-              <tbody class="divide-y divide-gray-200">
+              <tbody>
                 {scholarships.map((s, i) => (
-                  <tr class="*:text-gray-900 *:first:font-medium" key={s._id}>
-                    <td class="px-1 py-2 whitespace-nowrap">{i + 1}</td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      <div>
-                        <div className="font-bold">{s.scholarshipName}</div>
-                        <div className="text-sm opacity-60">
-                          {s.universityName}
-                        </div>
-                      </div>
+                  <tr key={s._id}>
+                    <th>{i + 1}</th>
+                    <td>{s.scholarshipName}</td>
+                    <td>{s.universityName}</td>
+                    <td>
+                      {s.universityCity},{s.universityCountry}
+                    </td>
+                    <td>{s.degree}</td>
+                    <td>{s.scholarshipCategory}</td>
+                    <td>{s.subjectCategory}</td>
+                    <td>{s.universityWorldRank}</td>
+                    <td>
+                      {format(new Date(s.applicationDeadline), "dd MMM yyyy")}
                     </td>
 
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      <div>
-                        <div className="font-bold">{s.universityCountry}</div>
-                        <div className="text-sm opacity-60">
-                          {s.universityCity}
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">{s.degree}</td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.scholarshipCategory}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.subjectCategory}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.universityWorldRank}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">{s.tuitionFees}</td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.applicationDeadline}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.applicationFees}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">
-                      {s.serviceCharge}
-                    </td>
-                    <td class="px-1 py-2 whitespace-nowrap">
+                    <td>${s.tuitionFees}</td>
+                    <td>${s.serviceCharge}</td>
+                    <td>
                       <Link
                         to={`/dashboard/update-scholarship/${s._id}`}
                         className="btn btn-square"

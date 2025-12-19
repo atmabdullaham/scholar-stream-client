@@ -1,5 +1,5 @@
 import { BsFileEarmarkText, BsFillPersonVcardFill } from "react-icons/bs";
-import { FaUsersCog } from "react-icons/fa";
+import { FaStarHalfAlt, FaUsersCog } from "react-icons/fa";
 import { IoSchoolSharp } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
 import { SiGoogleanalytics, SiSemanticscholar } from "react-icons/si";
@@ -114,7 +114,7 @@ const DashboardLayout = () => {
                     to="/dashboard/all-reviews"
                     className="flex items-center gap-3 hover:bg-teal-100 rounded-md p-2"
                   >
-                    <BsFileEarmarkText size={22} />
+                    <FaStarHalfAlt size={22} />
                     Review Management
                   </NavLink>
                 </li>
@@ -137,7 +137,7 @@ const DashboardLayout = () => {
                     to="/dashboard/my-reviews"
                     className="flex items-center gap-3 hover:bg-teal-100 rounded-md p-2"
                   >
-                    <BsFileEarmarkText size={22} />
+                    <FaStarHalfAlt size={22} />
                     My Reviews
                   </NavLink>
                 </li>

@@ -6,6 +6,7 @@ import { MdManageAccounts } from "react-icons/md";
 import { Link, NavLink, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
+import Logo from "../logo/Logo";
 
 const Navbar = () => {
   const { user, logOutUser } = useAuth();
@@ -13,7 +14,6 @@ const Navbar = () => {
   const email = user?.email;
   const [displayName, setDisplayName] = useState();
   const [photo, setPhoto] = useState();
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
     setPhoto(user?.photoURL);
@@ -33,25 +33,28 @@ const Navbar = () => {
     });
   };
 
-  useEffect(() => {
-    const html = document.querySelector("html");
-    html.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const handleTheme = (checked) => setTheme(checked ? "dark" : "light");
   const links = (
     <>
-      <li>
-        <NavLink to={"/"}>Home </NavLink>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to={"/"}
+        >
+          Home{" "}
+        </NavLink>
       </li>
-      <li>
-        <NavLink to={"/all-scholarships"}>All Scholarships </NavLink>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to={"/all-scholarships"}
+        >
+          All Scholarships{" "}
+        </NavLink>
       </li>
     </>
   );
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="md:w-11/12 mx-auto navbar  md:rounded-4xl mt-2 bg-teal-50 px-4 fixed top-0 left-0 right-0 z-50 ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -78,21 +81,14 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">ScholarStream</a>
+        <Link to={"/"}>
+          <Logo></Logo>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end gap-3 flex items-center">
-        {/* Theme Toggle */}
-
-        <input
-          onChange={(e) => handleTheme(e.target.checked)}
-          type="checkbox"
-          className="toggle"
-          defaultChecked={theme === "dark"}
-        />
-
         {user ? (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost p-0 border-0">

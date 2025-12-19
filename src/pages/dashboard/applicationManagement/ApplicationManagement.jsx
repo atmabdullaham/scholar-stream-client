@@ -8,8 +8,7 @@ const ApplicationManagement = () => {
 
   // STATE
   const [currentPage, setCurrentPage] = useState(0);
-  const [sort, setSort] = useState("createdAt");
-  const [order, setOrder] = useState("desc");
+
   const [searchText, setSearchText] = useState("");
   const [applicationStatus, setApplicationStatus] = useState("");
   const detailsModalRef = useRef();
@@ -26,19 +25,12 @@ const ApplicationManagement = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: [
-      "applications",
-      currentPage,
-      sort,
-      order,
-      searchText,
-      applicationStatus,
-    ],
+    queryKey: ["applications", currentPage, searchText, applicationStatus],
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/applications?limit=${limit}&skip=${
           currentPage * limit
-        }&sort=${sort}&order=${order}&search=${searchText}&applicationStatus=${applicationStatus}`
+        }&search=${searchText}&applicationStatus=${applicationStatus}`
       );
       return res.data;
     },
@@ -47,13 +39,6 @@ const ApplicationManagement = () => {
   const applications = data?.data || [];
   const total = data?.total || 0;
   const totalPage = data?.totalPage || 0;
-
-  // HANDLERS
-  const handleSort = (e) => {
-    const [field, ord] = e.target.value.split("-");
-    setSort(field);
-    setOrder(ord);
-  };
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
@@ -159,17 +144,6 @@ const ApplicationManagement = () => {
             <option value="processing">Processing</option>
             <option value="completed">Completed</option>
             <option value="rejected">Rejected</option>
-          </select>
-
-          <select
-            onChange={handleSort}
-            className="select select-bordered select-sm"
-          >
-            <option disabled selected>
-              Sort By
-            </option>
-            <option value="applicationDate-desc">Newest First</option>
-            <option value="applicationDate-asc">Oldest First</option>
           </select>
         </div>
       </div>
