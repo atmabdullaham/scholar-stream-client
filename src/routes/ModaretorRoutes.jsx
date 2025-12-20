@@ -1,3 +1,4 @@
+import LogoLoader from "../components/LogoLoader";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
 
@@ -6,11 +7,7 @@ const ModaretorRoutes = ({ children }) => {
   const { role, roleLoading } = useRole();
   console.log(role);
   if (loading || roleLoading) {
-    return (
-      <div>
-        <span className="loading loading-bars loading-xl"></span>
-      </div>
-    );
+    return <LogoLoader></LogoLoader>;
   }
 
   if (role !== "moderator") {

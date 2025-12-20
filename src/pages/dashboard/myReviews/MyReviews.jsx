@@ -4,12 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import EmptyState from "../../../components/EmptyState";
+import LogoLoader from "../../../components/LogoLoader";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyReviews = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const reviewModalRef = useRef(null);
   const [review, setReview] = useState(null);
   const [rating, setRating] = useState(0);
@@ -17,7 +19,7 @@ const MyReviews = () => {
   const email = user?.email;
   const {
     data: reviews = [],
-
+    isLoading,
     refetch,
   } = useQuery({
     queryKey: ["reviews", email],
@@ -118,52 +120,57 @@ const MyReviews = () => {
       }
     });
   };
-
-  console.log(reviews);
+  if (loading || isLoading) {
+    <LogoLoader></LogoLoader>;
+  }
   return (
     <div>
       <h3>My Reviews: {reviews.length}</h3>
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-        <table className="table">
-          {/* head */}
-          <thead>
-            <tr>
-              <th></th>
-              <th>Scholarship Name</th>
-              <th>University Name</th>
-              <th>Review Comment</th>
-              <th>Date</th>
-              <th>Rating</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reviews.map((r, i) => (
-              <tr key={r._id}>
-                <th>{i + 1}</th>
-                <td>{r.scholarshipName}</td>
-                <td>{r.universityName}</td>
-                <td>{r.reviewComment}</td>
-                <td>{r.reviewDate}</td>
-                <td>{r.ratingPoint}</td>
-                <td>
-                  <button
-                    onClick={() => handleOpenReviewModal(r._id)}
-                    className="btn btn-xs btn-success"
-                  >
-                    Edit Review
-                  </button>
-                  <button
-                    onClick={() => handleDeleteReview(r._id)}
-                    className="btn btn-xs btn-error"
-                  >
-                    Delete
-                  </button>
-                </td>
+        {reviews.length === 0 ? (
+          <EmptyState></EmptyState>
+        ) : (
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th></th>
+                <th>Scholarship Name</th>
+                <th>University Name</th>
+                <th>Review Comment</th>
+                <th>Date</th>
+                <th>Rating</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {reviews.map((r, i) => (
+                <tr key={r._id}>
+                  <th>{i + 1}</th>
+                  <td>{r.scholarshipName}</td>
+                  <td>{r.universityName}</td>
+                  <td>{r.reviewComment}</td>
+                  <td>{r.reviewDate}</td>
+                  <td>{r.ratingPoint}</td>
+                  <td>
+                    <button
+                      onClick={() => handleOpenReviewModal(r._id)}
+                      className="btn btn-xs btn-success"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteReview(r._id)}
+                      className="btn btn-xs btn-error"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
       <dialog
         ref={reviewModalRef}

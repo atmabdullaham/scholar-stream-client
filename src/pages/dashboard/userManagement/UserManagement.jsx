@@ -1,16 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { FaUserShield } from "react-icons/fa";
-import { FiShieldOff } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
+import LogoLoader from "../../../components/LogoLoader";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const UsersManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState("");
-  const { refetch, data: users = [] } = useQuery({
+  const {
+    isLoading,
+    refetch,
+    data: users = [],
+  } = useQuery({
     queryKey: ["users", searchText, filter],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -21,11 +24,12 @@ const UsersManagement = () => {
   });
 
   const handleAdminControl = (user, role) => {
-    const roleInfo = { role };
-    axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
-      console.log(res.data);
+    if (!role) return;
+
+    axiosSecure.patch(`/users/${user._id}/role`, { role }).then((res) => {
       refetch();
-      if (res.data.modifiedCount) {
+
+      if (res.data.modifiedCount > 0) {
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -50,6 +54,9 @@ const UsersManagement = () => {
       }
     });
   };
+  if (isLoading) {
+    <LogoLoader></LogoLoader>;
+  }
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -103,7 +110,7 @@ const UsersManagement = () => {
               <th>#</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Role</th>
+
               <th>Role</th>
               <th>Actions</th>
             </tr>
@@ -117,9 +124,8 @@ const UsersManagement = () => {
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
                         <img
-                          src={user.photoURL}
+                          src={user?.photoURL}
                           referrerPolicy="no-referrer"
-                          alt="Avatar Tailwind CSS Component"
                         />
                       </div>
                     </div>
@@ -129,42 +135,28 @@ const UsersManagement = () => {
                   </div>
                 </td>
                 <td>{user.email}</td>
-                <td>
-                  <select
-                    value={user.role}
-                    onChange={(e) => handleAdminControl(user, e.target.value)}
-                    className="select"
-                  >
-                    <option value="">Pick a role</option>
-                    <option value="student">Student</option>
-                    <option value="moderator">Moderator</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </td>
                 <td>{user.role}</td>
-                <th>
-                  {user?.role === "admin" ? (
-                    <button
-                      onClick={() => handleAdminControl(user, "student")}
-                      className="btn btn-outline bg-red-500 text-white"
+                <td>
+                  <button>
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleAdminControl(user, e.target.value)}
+                      className="select"
                     >
-                      <FiShieldOff></FiShieldOff>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleAdminControl(user, "admin")}
-                      className="btn"
-                    >
-                      <FaUserShield></FaUserShield>
-                    </button>
-                  )}
+                      <option value="">Pick a role</option>
+                      <option value="student">Student</option>
+                      <option value="moderator">Moderator</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </button>
+
                   <button
                     onClick={() => handleDeleteUser(user)}
                     className="btn bg-transparent border-none shadow-none"
                   >
                     <MdDelete className="text-red-500" size={20} />
                   </button>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>

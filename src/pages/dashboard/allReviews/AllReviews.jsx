@@ -1,13 +1,16 @@
 import "@smastrom/react-rating/style.css";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import LogoLoader from "../../../components/LogoLoader";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyReviews = () => {
   const axiosSecure = useAxiosSecure();
+  const { loading } = useAuth();
   const {
     data: reviews = [],
-
+    isLoading,
     refetch,
   } = useQuery({
     queryKey: ["reviews"],
@@ -45,10 +48,12 @@ const MyReviews = () => {
     });
   };
 
-  console.log(reviews);
+  if (isLoading || loading) {
+    return <LogoLoader></LogoLoader>;
+  }
   return (
     <div>
-      <h3>All Reviews: {reviews.length}</h3>
+      <h3 className="text-2xl font-bold">All Reviews: {reviews.length}</h3>
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
         <table className="table">
           {/* head */}
@@ -75,7 +80,7 @@ const MyReviews = () => {
                 <td>
                   <button
                     onClick={() => handleDeleteReview(r._id)}
-                    className="btn btn-xs btn-error"
+                    className="btn btn-xs btn-error bg-amber-100"
                   >
                     Delete
                   </button>

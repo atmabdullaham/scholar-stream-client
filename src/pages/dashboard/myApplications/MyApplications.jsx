@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import EmptyState from "../../../components/EmptyState";
+import LogoLoader from "../../../components/LogoLoader";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
@@ -16,6 +18,7 @@ const MyApplications = () => {
   const detailsModalRef = useRef();
   const [details, setDetails] = useState({});
   const reviewModalRef = useRef(null);
+  const editModalRef = useRef(null);
   const [review, setReview] = useState(null);
   const [rating, setRating] = useState(0);
   const { register, handleSubmit, reset } = useForm();
@@ -149,6 +152,15 @@ const MyApplications = () => {
       }
     });
   };
+  const handleOpenEditModal = () => {
+    editModalRef.current?.showModal();
+  };
+  const handleEditModalClose = () => {
+    editModalRef.current.close();
+  };
+  if (isLoading) {
+    return <LogoLoader></LogoLoader>;
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -160,9 +172,9 @@ const MyApplications = () => {
       </div>
 
       {/* TABLE */}
-      <div className="overflow-x-auto border rounded-lg">
-        {isLoading ? (
-          <p className="text-center py-10">Loading...</p>
+      <div className="overflow-x-auto rounded-lg">
+        {applications.length === 0 ? (
+          <EmptyState></EmptyState>
         ) : (
           <table className="table table-zebra">
             <thead>
@@ -203,7 +215,7 @@ const MyApplications = () => {
                     </button>
                     {app.applicationStatus === "pending" && (
                       <button
-                        onClick={() => handleOpenReviewModal(app._id)}
+                        onClick={() => handleOpenEditModal(app._id)}
                         className="btn btn-xs btn-outline"
                       >
                         Edit
@@ -393,6 +405,26 @@ const MyApplications = () => {
               </button>
             </footer>
           </form>
+        </div>
+      </dialog>
+      <dialog ref={editModalRef} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h2
+            id="modalTitle"
+            className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-2xl"
+          >
+            Nothing Editable
+          </h2>
+
+          <footer className="mt-6 flex justify-end gap-2">
+            <button
+              onClick={handleEditModalClose}
+              type="button"
+              className="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+            >
+              Cancel
+            </button>
+          </footer>
         </div>
       </dialog>
     </div>

@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import Swal from "sweetalert2";
+import EmptyState from "../../../components/EmptyState";
+import LogoLoader from "../../../components/LogoLoader";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ApplicationManagement = () => {
@@ -121,12 +123,9 @@ const ApplicationManagement = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* HEADER */}
+    <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <h2 className="text-2xl font-bold">Total Applications: {total}</h2>
-
-        {/* FILTERS */}
         <div className="flex flex-wrap gap-3">
           <input
             type="search"
@@ -147,11 +146,11 @@ const ApplicationManagement = () => {
           </select>
         </div>
       </div>
-
-      {/* TABLE */}
-      <div className="overflow-x-auto border rounded-lg">
-        {isLoading ? (
-          <p className="text-center py-10">Loading...</p>
+      {/* LOADING */}
+      {isLoading && <LogoLoader></LogoLoader>}
+      <div className="overflow-x-auto  rounded-lg">
+        {applications.length === 0 ? (
+          <EmptyState></EmptyState>
         ) : (
           <table className="table table-zebra">
             <thead>
@@ -176,11 +175,36 @@ const ApplicationManagement = () => {
                   <td>{app.universityName}</td>
                   <td>{app.feedback || "-"}</td>
                   <td>
-                    <span className="badge badge-outline">
+                    <span
+                      className={`badge badge-outline ${
+                        app.applicationStatus === "pending"
+                          ? "bg-amber-100"
+                          : ""
+                      } ${
+                        app.applicationStatus === "processing"
+                          ? "bg-blue-100"
+                          : ""
+                      } ${
+                        app.applicationStatus === "completed"
+                          ? "bg-green-100"
+                          : ""
+                      }  ${
+                        app.applicationStatus === "rejected" ? "bg-red-100" : ""
+                      } 
+                      `}
+                    >
                       {app.applicationStatus}
                     </span>
                   </td>
-                  <td>{app.paymentStatus}</td>
+                  <td
+                    className={
+                      app.paymentStatus === "paid"
+                        ? "text-green-600"
+                        : "text-amber-500"
+                    }
+                  >
+                    {app.paymentStatus}
+                  </td>
 
                   <td className="flex gap-2">
                     <button
@@ -216,7 +240,7 @@ const ApplicationManagement = () => {
                       onClick={() =>
                         handleChangeApplicationStatus(null, app._id, "rejected")
                       }
-                      className="btn btn-xs btn-error"
+                      className="btn btn-xs btn-error bg-amber-100"
                     >
                       Cancel
                     </button>
@@ -261,7 +285,9 @@ const ApplicationManagement = () => {
         className="modal modal-bottom sm:modal-middle"
       >
         <div className="modal-box">
-          <h3>Application Details</h3>
+          <h3 className="text-xl font-bold text-center pb-4">
+            Application Details
+          </h3>
           <div className="flow-root">
             <dl className="-my-3 divide-y divide-gray-200 text-sm">
               <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">

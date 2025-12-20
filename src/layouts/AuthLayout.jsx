@@ -1,14 +1,34 @@
 import { Outlet } from "react-router";
+import Logo from "../components/logo/Logo";
 
 const AuthLayout = () => {
   return (
-    <div className="max-w-7xl mx-auto bg-base-200 p-6 shadow-2xl">
-      <h2>Scholar Stream</h2>
-      <div className="flex min-h-[calc(100vh-100px)] items-center rounded-2xl p-4">
-        <div className="flex-1 h-full ">
-          <Outlet></Outlet>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+        {/* Left / Form Area */}
+        <div className="w-full md:w-1/2 flex items-center justify-center p-2 md:p-8">
+          <div className="w-full max-w-md space-y-6">
+            {/* Logo */}
+            <div className="flex justify-center md:justify-start mb-6">
+              <Logo />
+            </div>
+            <Outlet />
+          </div>
         </div>
-        <div className="flex-1 bg-[#FAFDF0]"></div>
+
+        {/* Right / Visual Area */}
+        <div className="hidden md:flex w-1/2 bg-linear-to-br from-teal-50 to-teal-100 items-center justify-center p-10">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Welcome to Scholar Stream 🎓
+            </h2>
+            <p className="text-gray-600 leading-relaxed">
+              Manage scholarships, track applications, and plan your academic
+              journey easily. Whether you’re registering or logging in, your
+              educational future starts here.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

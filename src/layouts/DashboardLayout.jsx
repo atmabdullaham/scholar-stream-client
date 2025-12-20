@@ -31,8 +31,8 @@ const DashboardLayout = () => {
 
       <div className="drawer-side">
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
-        <div className="flex flex-col min-h-full w-64 bg-white border-r shadow-lg text-gray-700">
-          <div className="p-6 border-b">
+        <div className="flex flex-col min-h-full w-64 bg-teal-50 shadow-lg text-gray-700">
+          <div className="p-6 ">
             <h3 className="text-lg font-semibold">Menu</h3>
           </div>
 

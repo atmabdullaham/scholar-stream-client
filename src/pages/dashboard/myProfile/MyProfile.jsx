@@ -6,11 +6,12 @@ import { MdOutlineNotInterested, MdVerified } from "react-icons/md";
 import { useNavigate } from "react-router";
 
 import Swal from "sweetalert2";
+import LogoLoader from "../../../components/LogoLoader";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyProfile = () => {
-  const { user, updateUserProfile, deleteAccount } = useAuth();
+  const { user, updateUserProfile, deleteAccount, loading } = useAuth();
 
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
@@ -97,9 +98,12 @@ const MyProfile = () => {
         });
       });
   };
+  if (loading) {
+    return <LogoLoader> </LogoLoader>;
+  }
 
   return (
-    <div className="grid grid-cols-12 w-11/12 md:w-10/12 mx-auto gap-5 py-4">
+    <div className="grid grid-cols-12 mx-auto gap-5 py-2">
       <div className="bg-cyan-50 col-span-12 md:col-span-3 flex flex-col items-center py-8 gap-4 rounded-2xl">
         <img
           src={currentPhoto}

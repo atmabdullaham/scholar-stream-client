@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router";
+import ErrorPage from "../components/ErrorPage";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
@@ -17,7 +18,6 @@ import PaymentSuccess from "../pages/dashboard/payment/PaymentSuccess";
 import ScholarshipManagement from "../pages/dashboard/scholarshipManagement/ScholarshipManagement";
 import UpdateScholarship from "../pages/dashboard/updateScholarship/UpdateScholarship";
 import UsersManagement from "../pages/dashboard/userManagement/UserManagement";
-import Error from "../pages/error/Error";
 import Home from "../pages/home/Home";
 import ScholarshipDetails from "../pages/scholarshipDetails/ScholarshipDetails";
 import AdminRoute from "./AdminRoutes";
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    errorElement: <Error></Error>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,

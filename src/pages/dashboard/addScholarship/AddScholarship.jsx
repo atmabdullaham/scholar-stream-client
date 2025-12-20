@@ -86,7 +86,7 @@ const AddScholarship = () => {
         >
           <h3>Scholarship details</h3>
           <hr />
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 1. Scholarship Name */}
             <fieldset className="fieldset">
               <label className="label">Scholarship Name</label>
@@ -104,7 +104,7 @@ const AddScholarship = () => {
                 {...register("scholarshipCategory", {
                   required: "Category is required",
                 })}
-                className="select outline-0 "
+                className="select outline-0 w-full"
               >
                 <option value="">Select Category</option>
                 <option value="Full fund">Full fund</option>
@@ -113,7 +113,7 @@ const AddScholarship = () => {
               </select>
             </fieldset>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 3. Degree */}
             <fieldset className="fieldset">
               <label className="label">Degree</label>
@@ -121,7 +121,7 @@ const AddScholarship = () => {
                 {...register("degree", {
                   required: "Degree is required",
                 })}
-                className="select outline-0"
+                className="select outline-0 w-full"
               >
                 <option value="">Select Degree</option>
                 <option value="Diploma">Diploma</option>
@@ -132,13 +132,13 @@ const AddScholarship = () => {
               </select>
             </fieldset>
             {/* 4. Subject Category */}
-            <fieldset className="fieldset">
+            <fieldset className="fieldset ">
               <label className="label">Subject Category</label>
               <select
                 {...register("subjectCategory", {
                   required: "Category is required",
                 })}
-                className="select outline-0 "
+                className="select outline-0  w-full"
               >
                 <option value="">Select Subject Category</option>
                 <option value="Computer Science">Computer Science</option>
@@ -205,7 +205,10 @@ const AddScholarship = () => {
             {/*8.  University Country */}
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Country</legend>
-              <select {...register("universityCountry")} className="select">
+              <select
+                {...register("universityCountry")}
+                className="select w-full"
+              >
                 <option value={""}>Select Country</option>
                 {countries.map((r, i) => (
                   <option value={r} key={i}>
@@ -217,7 +220,7 @@ const AddScholarship = () => {
             {/*9.  University City */}
             <fieldset className="fieldset">
               <legend className="fieldset-legend">City</legend>
-              <select {...register("universityCity")} className="select">
+              <select {...register("universityCity")} className="select w-full">
                 <option value={""}>Select City</option>
                 {citiesByCountry(universityCountry).map((r, i) => (
                   <option value={r} key={i}>

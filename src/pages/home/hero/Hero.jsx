@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { Link } from "react-router";
 const Hero = () => {
   return (
-    <div className="bg-green-100">
+    <div className="bg-teal-100">
       <div className="py-10 md:py-20 w-11/12 md:w-10/12 mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-10">
           {/* Left Section */}
@@ -12,11 +12,11 @@ const Hero = () => {
             transition={{ duration: 1, ease: "easeIn" }}
             className="relative w-full md:w-1/2 text-center md:text-left"
           >
-            <h1 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
               <span className="text-gray-900 font-bangla">
                 Find the Right Scholarship for{" "}
               </span>
-              <span className="text-emerald-500">Your Future </span>
+              <span className="text-teal-700">Your Bright Future </span>
             </h1>
 
             <p className="text-gray-700 text-base lg:text-lg mb-0 lg:mb-8 max-w-xl  leading-relaxed">
@@ -28,7 +28,7 @@ const Hero = () => {
             {/* Button - only on md and up */}
             <div className="hidden md:flex">
               <Link to="/all-scholarships">
-                <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md font-semibold shadow transition flex items-center gap-2 text-sm sm:text-base">
+                <button className="bg-teal-600 hover:bg-teal-600 text-white px-6 py-3 rounded-md font-semibold shadow transition flex items-center gap-2 text-sm sm:text-base">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -72,7 +72,7 @@ const Hero = () => {
             {/* Button - only on small devices */}
             <div className="block md:hidden mt-6">
               <Link to="/all-scholarships">
-                <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md font-semibold shadow transition flex items-center gap-2 text-sm sm:text-base">
+                <button className="bg-teal-600 hover:bg-teal-600 text-white px-6 py-3 rounded-md font-semibold shadow transition flex items-center gap-2 text-sm sm:text-base">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

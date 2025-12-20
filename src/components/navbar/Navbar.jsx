@@ -54,7 +54,7 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="md:w-11/12 mx-auto navbar  md:rounded-4xl mt-2 bg-teal-50 px-4 fixed top-0 left-0 right-0 z-50 ">
+    <div className="md:w-11/12 mx-auto navbar  md:rounded-4xl md:mt-2 bg-teal-50 px-4 fixed top-0 left-0 right-0 z-50 ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -169,7 +169,7 @@ const Navbar = () => {
               <div className="hidden sm:flex">
                 <Link
                   to={"/auth/register"}
-                  className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+                  className="rounded-md bg-white border hover:bg-teal-600 hover:text-white px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
                 >
                   Register
                 </Link>

@@ -5,10 +5,14 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
+import EmptyState from "../../../components/EmptyState";
+import LogoLoader from "../../../components/LogoLoader";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ScholarshipManagement = () => {
   const axiosSecure = useAxiosSecure();
+  const { loading } = useAuth();
   const [currentPage, setCurrentPage] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
@@ -100,63 +104,67 @@ const ScholarshipManagement = () => {
             </div>
           </div>
 
-          {isLoading && <p className="text-center py-10">Loading...</p>}
+          {isLoading && <LogoLoader></LogoLoader>}
           <div className="overflow-x-auto">
-            <table className="table table-xs">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Scholarship Name</th>
-                  <th>University Name</th>
-                  <th>Location</th>
-                  <th>Degree</th>
-                  <th>Category</th>
-                  <th>Subject</th>
-                  <th>Ranking</th>
-                  <th>Deadline</th>
-                  <th>Application Fees</th>
-                  <th>Charge</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {scholarships.map((s, i) => (
-                  <tr key={s._id}>
-                    <th>{i + 1}</th>
-                    <td>{s.scholarshipName}</td>
-                    <td>{s.universityName}</td>
-                    <td>
-                      {s.universityCity},{s.universityCountry}
-                    </td>
-                    <td>{s.degree}</td>
-                    <td>{s.scholarshipCategory}</td>
-                    <td>{s.subjectCategory}</td>
-                    <td>{s.universityWorldRank}</td>
-                    <td>
-                      {format(new Date(s.applicationDeadline), "dd MMM yyyy")}
-                    </td>
-
-                    <td>${s.tuitionFees}</td>
-                    <td>${s.serviceCharge}</td>
-                    <td>
-                      <Link
-                        to={`/dashboard/update-scholarship/${s._id}`}
-                        className="btn btn-square"
-                      >
-                        <FaEdit />
-                      </Link>
-
-                      <button
-                        onClick={() => handleDelete(s._id)}
-                        className="btn btn-square"
-                      >
-                        <MdDelete />
-                      </button>
-                    </td>
+            {scholarships.length === 0 ? (
+              <EmptyState></EmptyState>
+            ) : (
+              <table className="table table-xs">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Scholarship Name</th>
+                    <th>University Name</th>
+                    <th>Location</th>
+                    <th>Degree</th>
+                    <th>Category</th>
+                    <th>Subject</th>
+                    <th>Ranking</th>
+                    <th>Deadline</th>
+                    <th>Application Fees</th>
+                    <th>Charge</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {scholarships.map((s, i) => (
+                    <tr key={s._id}>
+                      <th>{i + 1}</th>
+                      <td>{s.scholarshipName}</td>
+                      <td>{s.universityName}</td>
+                      <td>
+                        {s.universityCity},{s.universityCountry}
+                      </td>
+                      <td>{s.degree}</td>
+                      <td>{s.scholarshipCategory}</td>
+                      <td>{s.subjectCategory}</td>
+                      <td>{s.universityWorldRank}</td>
+                      <td>
+                        {format(new Date(s.applicationDeadline), "dd MMM yyyy")}
+                      </td>
+
+                      <td>${s.applicationFees}</td>
+                      <td>${s.serviceCharge}</td>
+                      <td>
+                        <Link
+                          to={`/dashboard/update-scholarship/${s._id}`}
+                          className="btn btn-square"
+                        >
+                          <FaEdit />
+                        </Link>
+
+                        <button
+                          onClick={() => handleDelete(s._id)}
+                          className="btn btn-square"
+                        >
+                          <MdDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
           {/* PAGINATION */}
