@@ -37,6 +37,7 @@ const MyApplications = () => {
       const res = await axiosSecure.get(`/my-applications/${email}`);
       return res.data;
     },
+    refetchInterval: 2000,
   });
 
   // show details

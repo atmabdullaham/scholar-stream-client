@@ -14,11 +14,11 @@ const MyReviews = () => {
     refetch,
   } = useQuery({
     queryKey: ["reviews"],
-
     queryFn: async () => {
       const res = await axiosSecure.get(`/reviews`);
       return res.data;
     },
+    refetchInterval: 2000,
   });
 
   const handleDeleteReview = (id) => {
