@@ -70,26 +70,34 @@ const SuccessStories = () => {
 
         <div className="md:columns-2 lg:columns-3 gap-8 space-y-8">
           {stories.map((story) => (
-            <div className="aspect-auto p-8 border border-gray-100 rounded-3xl bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl shadow-gray-600/10 dark:shadow-none">
-              <div className="flex gap-4">
-                <img
-                  className="w-12 h-12 rounded-full"
-                  src={story.imgUrl}
-                  alt="user avatar"
-                  width="400"
-                  height="400"
-                  loading="lazy"
-                />
-                <div>
-                  <h6 className="text-lg font-medium text-gray-700 dark:text-white">
-                    {story.name}
-                  </h6>
-                  <p className="text-sm text-gray-500 dark:text-gray-300">
-                    {story.country}
-                  </p>
+            <div
+              key={story.name}
+              className="p-8 border border-gray-100 rounded-3xl bg-white dark:bg-gray-800 dark:border-gray-700
+               shadow-2xl shadow-gray-600/10 dark:shadow-none
+               flex flex-col justify-between "
+            >
+              <div>
+                <div className="flex gap-4">
+                  <img
+                    className="w-12 h-12 rounded-full object-cover"
+                    src={story.imgUrl}
+                    alt={story.name}
+                    loading="lazy"
+                  />
+                  <div>
+                    <h6 className="text-lg font-medium text-gray-700 dark:text-white">
+                      {story.name}
+                    </h6>
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
+                      {story.country}
+                    </p>
+                  </div>
                 </div>
+
+                <p className="mt-6 text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
+                  {story.message}
+                </p>
               </div>
-              <p className="mt-8">{story.message}</p>
             </div>
           ))}
         </div>

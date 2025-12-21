@@ -1,3 +1,4 @@
+import { Image } from "@imagekit/react";
 import { motion } from "motion/react";
 import { Link } from "react-router";
 const Hero = () => {
@@ -62,10 +63,12 @@ const Hero = () => {
             className="w-full md:w-1/2 flex flex-col items-center md:items-end"
           >
             <div className=" flex items-center justify-center md:justify-end">
-              <img
-                src="https://i.ibb.co.com/TDbSHmrc/White-Brown-Education-Instagram-Post.png"
+              <Image
+                urlEndpoint="https://ik.imagekit.io/atm"
+                src="https://ik.imagekit.io/atm/scholarship-banner.png"
+                width={800}
+                height={600}
                 className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg aspect-[4/3] w-full h-auto object-contain rounded-b-full border-b-[1px] border-white drop-shadow-2xl"
-                loading="lazy"
               />
             </div>
 

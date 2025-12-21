@@ -4,6 +4,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData, useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 
+import LogoLoader from "../../../components/LogoLoader";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import imagekitUploader from "../../../utils/imagekitUploader";
 
@@ -185,24 +186,18 @@ const UpdateScholarship = () => {
   }, [scholarship, reset]);
 
   if (loading || isLoading) {
-    return (
-      <div class="flex gap-2">
-        <span class="size-3 animate-ping rounded-full bg-indigo-600"></span>
-        <span class="size-3 animate-ping rounded-full bg-indigo-600 [animation-delay:0.2s]"></span>
-        <span class="size-3 animate-ping rounded-full bg-indigo-600 [animation-delay:0.4s]"></span>
-      </div>
-    );
+    return <LogoLoader></LogoLoader>;
   }
   return (
     <div className="bg-gray-100 dark:bg-gray-900 py-2">
-      <div className="w-full max-w-3xl mx-auto p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md border dark:border-gray-700">
+      <div className="w-full max-w-3xl mx-auto p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md dark:border-gray-700">
         <h2 className="text-3xl font-bold text-center">Update Scholarship</h2>
         <form
           onSubmit={handleSubmit(handleUpdateScholarship)}
           className="mt-6 p-4"
         >
-          <h3>Scholarship details</h3>
-          <hr />
+          <h3 className="font-semibold text-gray-700">Scholarship details</h3>
+          <hr className="border-0 h-px bg-gray-200 my-2" />
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* 1. Scholarship Name */}
             <fieldset className="fieldset">
@@ -271,8 +266,10 @@ const UpdateScholarship = () => {
               </select>
             </fieldset>
           </div>
-          <h3>University details</h3>
-          <hr />
+          <h3 className="font-semibold text-gray-700 pt-2">
+            University details
+          </h3>
+          <hr className="border-0 h-px bg-gray-200 my-2" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 5. University Name */}
             <fieldset className="fieldset">
@@ -344,8 +341,8 @@ const UpdateScholarship = () => {
               </select>
             </fieldset>
           </div>
-          <h3>Others details</h3>
-          <hr />
+          <h3 className="font-semibold text-gray-700 pt-2">Others details</h3>
+          <hr className="border-0 h-px bg-gray-200 my-2" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 10.Tution Fees*/}
             <fieldset className="fieldset">

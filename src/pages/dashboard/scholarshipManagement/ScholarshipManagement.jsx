@@ -106,7 +106,7 @@ const ScholarshipManagement = () => {
 
           {isLoading && <LogoLoader></LogoLoader>}
           <div className="overflow-x-auto">
-            {scholarships.length === 0 ? (
+            {!isLoading && scholarships.length === 0 ? (
               <EmptyState></EmptyState>
             ) : (
               <table className="table table-xs">

@@ -18,6 +18,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import LogoLoader from "../../components/LogoLoader";
 import ScholarshipReviewCard from "../../components/ScholarshipReviewCard";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -78,7 +79,7 @@ const ScholarshipDetails = () => {
     : format(safeDate, "dd MMM yyyy, hh:mm a");
 
   if (loading || isLoading) {
-    return "loading";
+    return <LogoLoader></LogoLoader>;
   }
 
   //   payment handler
@@ -258,7 +259,7 @@ const ScholarshipDetails = () => {
             <h2 className="text-2xl font-bold text-teal-700">Reviews</h2>
           )}
           {totalReviews !== 0 && (
-            <div className="mt-6 flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm border">
+            <div className="mt-6 flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-3xl font-bold text-yellow-500">
                   {averageRating}

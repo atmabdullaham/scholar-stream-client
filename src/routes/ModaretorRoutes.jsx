@@ -10,12 +10,12 @@ const ModaretorRoutes = ({ children }) => {
     return <LogoLoader></LogoLoader>;
   }
 
+  if (!role) {
+    return <LogoLoader />;
+  }
+
   if (role !== "moderator") {
-    return (
-      <div>
-        <p>Access is forbidden</p>
-      </div>
-    );
+    return <p>Access is forbidden</p>;
   }
   return children;
 };

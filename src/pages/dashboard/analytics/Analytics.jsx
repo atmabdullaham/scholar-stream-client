@@ -8,12 +8,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import LogoLoader from "../../../components/LogoLoader";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Analytics = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data: summary = {} } = useQuery({
+  const { isLoading, data: summary = {} } = useQuery({
     queryKey: ["analytics-summary"],
     queryFn: async () => {
       const res = await axiosSecure.get("/analytics/summary");
@@ -33,6 +34,10 @@ const Analytics = () => {
     Partial: "#3b82f6",
     "Self fund": "#f97316",
   };
+
+  if (isLoading) {
+    return <LogoLoader></LogoLoader>;
+  }
 
   return (
     <div className="p-6 space-y-10 max-w-5xl mx-auto">

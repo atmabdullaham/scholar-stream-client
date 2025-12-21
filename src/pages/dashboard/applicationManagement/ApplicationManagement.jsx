@@ -36,6 +36,7 @@ const ApplicationManagement = () => {
       );
       return res.data;
     },
+    refetchInterval: 2000,
   });
 
   const applications = data?.data || [];
@@ -149,7 +150,7 @@ const ApplicationManagement = () => {
       {/* LOADING */}
       {isLoading && <LogoLoader></LogoLoader>}
       <div className="overflow-x-auto  rounded-lg">
-        {applications.length === 0 ? (
+        {!isLoading && applications.length === 0 ? (
           <EmptyState></EmptyState>
         ) : (
           <table className="table table-zebra">

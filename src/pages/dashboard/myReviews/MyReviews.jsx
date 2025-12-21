@@ -121,13 +121,13 @@ const MyReviews = () => {
     });
   };
   if (loading || isLoading) {
-    <LogoLoader></LogoLoader>;
+    return <LogoLoader></LogoLoader>;
   }
   return (
     <div>
       <h3>My Reviews: {reviews.length}</h3>
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-        {reviews.length === 0 ? (
+        {!isLoading && reviews.length === 0 ? (
           <EmptyState></EmptyState>
         ) : (
           <table className="table">

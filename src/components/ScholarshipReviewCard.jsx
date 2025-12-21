@@ -13,7 +13,7 @@ const ScholarshipReviewCard = ({ review }) => {
   } = review;
 
   return (
-    <div className="h-full rounded-2xl bg-white p-5 shadow-sm border hover:shadow-md transition flex flex-col">
+    <div className="h-full rounded-2xl bg-teal-50 p-5 shadow-sm hover:shadow-md transition flex flex-col">
       <div className="flex items-center gap-3 mb-4">
         <img
           src={userImage}

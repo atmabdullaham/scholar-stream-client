@@ -9,12 +9,12 @@ const AdminRoute = ({ children }) => {
     return <LogoLoader></LogoLoader>;
   }
 
+  if (!role) {
+    return <LogoLoader />;
+  }
+
   if (role !== "admin") {
-    return (
-      <div>
-        <p>Access is forbidden</p>
-      </div>
-    );
+    return <p>Access is forbidden</p>;
   }
   return children;
 };

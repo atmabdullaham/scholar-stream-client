@@ -55,7 +55,7 @@ const UsersManagement = () => {
     });
   };
   if (isLoading) {
-    <LogoLoader></LogoLoader>;
+    return <LogoLoader></LogoLoader>;
   }
   return (
     <div>

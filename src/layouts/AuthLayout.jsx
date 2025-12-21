@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import Logo from "../components/logo/Logo";
 
 const AuthLayout = () => {
@@ -10,7 +10,9 @@ const AuthLayout = () => {
           <div className="w-full max-w-md space-y-6">
             {/* Logo */}
             <div className="flex justify-center md:justify-start mb-6">
-              <Logo />
+              <Link to={"/"}>
+                <Logo />
+              </Link>
             </div>
             <Outlet />
           </div>
@@ -20,12 +22,11 @@ const AuthLayout = () => {
         <div className="hidden md:flex w-1/2 bg-linear-to-br from-teal-50 to-teal-100 items-center justify-center p-10">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Welcome to Scholar Stream 🎓
+              Scholar Stream 🎓
             </h2>
             <p className="text-gray-600 leading-relaxed">
               Manage scholarships, track applications, and plan your academic
-              journey easily. Whether you’re registering or logging in, your
-              educational future starts here.
+              journey easily.
             </p>
           </div>
         </div>
