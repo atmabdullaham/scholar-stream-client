@@ -7,40 +7,47 @@ const FAQ = () => {
   const faqs = [
     {
       question: "How do I apply for a scholarship?",
-      answer: "Browse our scholarship listings, click on a scholarship that interests you, review the details, and click 'Apply'. You'll be directed to our secure payment portal to complete your application.",
+      answer:
+        "Browse our scholarship listings, click on a scholarship that interests you, review the details, and click 'Apply'. You'll be directed to our secure payment portal to complete your application.",
     },
     {
       question: "What information do I need to provide?",
-      answer: "You'll need to provide your personal information, educational background, and upload any required documents such as transcripts, essays, and recommendation letters.",
+      answer:
+        "You'll need to provide your personal information, educational background, and upload any required documents such as transcripts, essays, and recommendation letters.",
     },
     {
       question: "How long does the approval process take?",
-      answer: "Most applications are reviewed within 2-4 weeks. You can track the status of your application in your dashboard at any time.",
+      answer:
+        "Most applications are reviewed within 2-4 weeks. You can track the status of your application in your dashboard at any time.",
     },
     {
       question: "Can I apply for multiple scholarships?",
-      answer: "Yes! We encourage you to apply for multiple scholarships. Each application increases your chances of securing funding.",
+      answer:
+        "Yes! We encourage you to apply for multiple scholarships. Each application increases your chances of securing funding.",
     },
     {
       question: "Are there any hidden fees?",
-      answer: "No, we're completely transparent about fees. Any applicable fees will be clearly displayed before you confirm your application.",
+      answer:
+        "No, we're completely transparent about fees. Any applicable fees will be clearly displayed before you confirm your application.",
     },
     {
       question: "How do I contact support?",
-      answer: "You can reach our support team via email at support@scholarstream.com, phone at +1 (555) 123-4567, or use the live chat feature on our website.",
+      answer:
+        "You can reach our support team via email at support@scholarstream.com, phone at +1 (555) 123-4567, or use the live chat feature on our website.",
     },
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="w-11/12 md:w-10/12 mx-auto">
+    <section className=" bg-teal-100">
+      <div className="w-11/12 md:w-10/12 mx-auto py-8 md:py-16">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Find answers to common questions about scholarships and our platform.
+            Find answers to common questions about scholarships and our
+            platform.
           </p>
         </div>
 

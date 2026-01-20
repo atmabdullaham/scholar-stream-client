@@ -7,15 +7,16 @@ const Statistics = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
-      <div className="w-11/12 md:w-10/12 mx-auto">
+    <section className=" bg-teal-50">
+      <div className="w-11/12 md:w-10/12 mx-auto py-8 md:py-16">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Our Impact by Numbers
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Join thousands of students who have successfully found and secured their scholarship opportunities.
+            Join thousands of students who have successfully found and secured
+            their scholarship opportunities.
           </p>
         </div>
 

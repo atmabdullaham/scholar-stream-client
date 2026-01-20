@@ -35,7 +35,8 @@ const Testimonials = () => {
             Success Stories
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Real experiences from students who achieved their dreams with Scholar Stream
+            Real experiences from students who achieved their dreams with
+            Scholar Stream
           </p>
         </div>
 
@@ -57,9 +58,7 @@ const Testimonials = () => {
                   <h6 className="text-lg font-semibold text-gray-900">
                     {testimonial.name}
                   </h6>
-                  <p className="text-sm text-gray-600">
-                    {testimonial.country}
-                  </p>
+                  <p className="text-sm text-gray-600">{testimonial.country}</p>
                 </div>
               </div>
 

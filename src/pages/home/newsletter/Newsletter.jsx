@@ -18,17 +18,21 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-r from-teal-50 to-indigo-50">
-      <div className="w-11/12 md:w-10/12 mx-auto">
+    <section className="bg-teal-50">
+      <div className="w-11/12 md:w-10/12 mx-auto py-8 md:py-16">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Stay Updated
           </h2>
           <p className="text-gray-600 mb-8">
-            Subscribe to our newsletter for the latest scholarship opportunities and tips.
+            Subscribe to our newsletter for the latest scholarship opportunities
+            and tips.
           </p>
 
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
+          <form
+            onSubmit={handleSubscribe}
+            className="flex flex-col sm:flex-row gap-3"
+          >
             <input
               type="email"
               placeholder="Enter your email"

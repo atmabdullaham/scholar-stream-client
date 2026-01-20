@@ -12,12 +12,18 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
 
   const handleLogin = (data) => {
     loginExistingUser(data.email, data.password).then(() => {
       navigate(location.state || "/");
     });
+  };
+
+  const handleDemoLogin = () => {
+    setValue("email", "mr.sadek@gmail.com");
+    setValue("password", "Pass@123");
   };
 
   return (
@@ -67,6 +73,15 @@ const Login = () => {
         {/* Submit */}
         <button className="btn w-full bg-teal-600 hover:bg-teal-700 text-white">
           Login
+        </button>
+
+        {/* Admin Login Button */}
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          className="btn w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+        >
+          Demo Login
         </button>
       </form>
 

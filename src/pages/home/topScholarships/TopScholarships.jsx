@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import SkeletonCard from "../../../components/SkeletonCard";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import ScholarshipCard from "../../allScholarships/scholarshipCard/ScholarshipCard";
 
 const TopScholarships = () => {
   const axiosSecure = useAxiosSecure();
-  const { data: scholarships = [] } = useQuery({
+  const { data: scholarships = [], isLoading } = useQuery({
     queryKey: ["topScholarships"],
     queryFn: async () => {
       const res = await axiosSecure.get("/top-scholarships");
@@ -25,9 +26,16 @@ const TopScholarships = () => {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {scholarships.map((scholarship) => (
-            <ScholarshipCard key={scholarship._id} scholarship={scholarship} />
-          ))}
+          {isLoading
+            ? Array(3)
+                .fill(0)
+                .map((_, index) => <SkeletonCard key={index} />)
+            : scholarships.map((scholarship) => (
+                <ScholarshipCard
+                  key={scholarship._id}
+                  scholarship={scholarship}
+                />
+              ))}
         </div>
       </div>
     </section>

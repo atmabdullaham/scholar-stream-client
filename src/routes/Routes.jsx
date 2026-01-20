@@ -3,9 +3,12 @@ import ErrorPage from "../components/ErrorPage";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
+import AboutUs from "../pages/aboutUs/AboutUs";
 import AllScholarships from "../pages/allScholarships/AllScholarships";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import Blog from "../pages/blog/Blog";
+import ContactSupport from "../pages/contactSupport/ContactSupport";
 import AddScholarship from "../pages/dashboard/addScholarship/AddScholarship";
 import AllReviews from "../pages/dashboard/allReviews/AllReviews";
 import Analytics from "../pages/dashboard/analytics/Analytics";
@@ -46,6 +49,18 @@ const router = createBrowserRouter([
             <ScholarshipDetails></ScholarshipDetails>
           </PrivateRoutes>
         ),
+      },
+      {
+        path: "/about-us",
+        Component: AboutUs,
+      },
+      {
+        path: "/contact-support",
+        Component: ContactSupport,
+      },
+      {
+        path: "/blog",
+        Component: Blog,
       },
     ],
   },

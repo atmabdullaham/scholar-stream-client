@@ -3,6 +3,15 @@ import "@smastrom/react-rating/style.css";
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaCreditCard,
+  FaEdit,
+  FaEye,
+  FaStar,
+  FaTrash,
+} from "react-icons/fa";
 import Swal from "sweetalert2";
 import EmptyState from "../../../components/EmptyState";
 import LogoLoader from "../../../components/LogoLoader";
@@ -163,269 +172,446 @@ const MyApplications = () => {
     return <LogoLoader></LogoLoader>;
   }
 
+  // Calculate statistics
+  const pendingCount = applications.filter(
+    (app) => app.applicationStatus === "pending",
+  ).length;
+  const completedCount = applications.filter(
+    (app) => app.applicationStatus === "completed",
+  ).length;
+  const unpaidCount = applications.filter(
+    (app) => app.paymentStatus === "unpaid",
+  ).length;
+
   return (
-    <div className="p-6 space-y-6">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <h2 className="text-2xl font-bold">
-          My Applications:{applications.length}
-        </h2>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl p-8 shadow-lg">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">My Applications</h1>
+            <p className="text-purple-50">
+              Track and manage all your scholarship applications
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-5xl font-bold">{applications.length}</p>
+            <p className="text-purple-100">Total Applications</p>
+          </div>
+        </div>
       </div>
 
-      {/* TABLE */}
-      <div className="overflow-x-auto rounded-lg">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-xl shadow-md border border-purple-200 overflow-hidden hover:shadow-lg transition-shadow">
+          <div className="h-2 bg-gradient-to-r from-purple-600 to-indigo-600"></div>
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                  Total Applications
+                </p>
+                <p className="text-3xl font-bold text-purple-700 mt-2">
+                  {applications.length}
+                </p>
+              </div>
+              <FaClock className="text-purple-600 text-4xl opacity-20" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md border border-amber-200 overflow-hidden hover:shadow-lg transition-shadow">
+          <div className="h-2 bg-gradient-to-r from-amber-500 to-orange-600"></div>
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                  Pending Review
+                </p>
+                <p className="text-3xl font-bold text-amber-700 mt-2">
+                  {pendingCount}
+                </p>
+              </div>
+              <FaClock className="text-amber-600 text-4xl opacity-20" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md border border-green-200 overflow-hidden hover:shadow-lg transition-shadow">
+          <div className="h-2 bg-gradient-to-r from-green-600 to-teal-600"></div>
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                  Completed
+                </p>
+                <p className="text-3xl font-bold text-green-700 mt-2">
+                  {completedCount}
+                </p>
+              </div>
+              <FaCheckCircle className="text-green-600 text-4xl opacity-20" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TABLE SECTION */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
         {applications.length === 0 ? (
           <EmptyState></EmptyState>
         ) : (
-          <table className="table table-zebra">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>University Name</th>
-                <th>Address</th>
-                <th>Feedback</th>
-                <th>Subject Category</th>
-                <th>Application Fees</th>
-                <th>Application Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {applications.map((app, index) => (
-                <tr key={app._id}>
-                  <td>{index + 1}</td>
-                  <td>{app.universityName}</td>
-                  <td>
-                    {app.scholarshipDetails.universityCity}
-                    {","}
-                    {app.scholarshipDetails.universityCountry}
-                  </td>
-                  <td>{app.feedback || "-"} </td>
-                  <td>{app.scholarshipDetails.subjectCategory}</td>
-                  <td>{app.applicationFees}</td>
-
-                  <td>{app.applicationStatus}</td>
-
-                  <td className="flex gap-2">
-                    <button
-                      onClick={() => handleShowDetails(app._id)}
-                      className="btn btn-xs btn-outline"
-                    >
-                      Details
-                    </button>
-                    {app.applicationStatus === "pending" && (
-                      <button
-                        onClick={() => handleOpenEditModal(app._id)}
-                        className="btn btn-xs btn-outline"
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {app.paymentStatus === "unpaid" &&
-                      app.applicationStatus === "pending" && (
-                        <button
-                          onClick={() => handlePayment(app)}
-                          className="btn btn-xs btn-outline"
-                        >
-                          pay
-                        </button>
-                      )}
-
-                    {app.applicationStatus === "pending" && (
-                      <button
-                        onClick={() => handleDeleteApplication(app._id)}
-                        className="btn btn-xs btn-error"
-                      >
-                        Delete
-                      </button>
-                    )}
-                    {app.applicationStatus === "completed" && (
-                      <button
-                        onClick={() => handleOpenReviewModal(app._id)}
-                        className="btn btn-xs btn-success"
-                      >
-                        Add Review
-                      </button>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-purple-50 to-indigo-50 border-b-2 border-gray-200">
+                  <th className="px-4 py-3 text-left font-bold text-gray-800 w-10">
+                    #
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800 min-w-[180px]">
+                    University
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">
+                    Scholarship
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800 whitespace-nowrap">
+                    Payment
+                  </th>
+                  <th className="px-4 py-3 text-right font-bold text-gray-800 whitespace-nowrap">
+                    Fees
+                  </th>
+                  <th className="px-4 py-3 text-center font-bold text-gray-800 whitespace-nowrap">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {applications.map((app, index) => (
+                  <tr
+                    key={app._id}
+                    className="border-b hover:bg-purple-50 transition-colors duration-200"
+                  >
+                    <td className="px-4 py-3 font-semibold text-gray-700 w-10">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-3 min-w-[180px]">
+                      <div>
+                        <p className="font-bold text-gray-800 text-sm">
+                          {app.universityName}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {app.scholarshipDetails?.universityCity},{" "}
+                          {app.scholarshipDetails?.universityCountry}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-semibold">
+                        {app.scholarshipDetails?.subjectCategory || "N/A"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          app.applicationStatus === "completed"
+                            ? "bg-green-100 text-green-700"
+                            : app.applicationStatus === "pending"
+                              ? "bg-amber-100 text-amber-700"
+                              : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {app.applicationStatus === "completed"
+                          ? "✓ Completed"
+                          : app.applicationStatus === "pending"
+                            ? "⏱ Pending"
+                            : app.applicationStatus}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          app.paymentStatus === "paid"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {app.paymentStatus === "paid" ? "✓ Paid" : "✗ Unpaid"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-right">
+                      <div className="text-sm font-bold text-purple-600">
+                        ${app.applicationFees}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        +${app.serviceCharge}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          onClick={() => handleShowDetails(app._id)}
+                          className="btn btn-sm btn-square bg-purple-600 text-white border-0 hover:bg-purple-700 transition-colors"
+                          title="View Details"
+                        >
+                          <FaEye size={14} />
+                        </button>
+                        {app.applicationStatus === "pending" && (
+                          <>
+                            <button
+                              onClick={() => handleOpenEditModal(app._id)}
+                              className="btn btn-sm btn-square bg-teal-600 text-white border-0 hover:bg-teal-700 transition-colors"
+                              title="Edit Application"
+                            >
+                              <FaEdit size={14} />
+                            </button>
+                            {app.paymentStatus === "unpaid" && (
+                              <button
+                                onClick={() => handlePayment(app)}
+                                className="btn btn-sm btn-square bg-blue-600 text-white border-0 hover:bg-blue-700 transition-colors"
+                                title="Make Payment"
+                              >
+                                <FaCreditCard size={14} />
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDeleteApplication(app._id)}
+                              className="btn btn-sm btn-square bg-red-600 text-white border-0 hover:bg-red-700 transition-colors"
+                              title="Delete Application"
+                            >
+                              <FaTrash size={14} />
+                            </button>
+                          </>
+                        )}
+                        {app.applicationStatus === "completed" && (
+                          <button
+                            onClick={() => handleOpenReviewModal(app._id)}
+                            className="btn btn-sm btn-square bg-amber-600 text-white border-0 hover:bg-amber-700 transition-colors"
+                            title="Add Review"
+                          >
+                            <FaStar size={14} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-      {/* details modal */}
-
+      {/* Details Modal */}
       <dialog
         ref={detailsModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
-        <div className="modal-box">
-          <h3 className="text-xl font-semibold text-center pb-4">
+        <div className="modal-box max-w-2xl">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 -m-6 mb-6 rounded-t-lg">
             Application Details
           </h3>
-          <div className="flow-root">
-            <dl className="-my-3 divide-y divide-gray-200 text-sm">
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Applicant Name</dt>
-                <dd className="text-gray-700 sm:col-span-2">
+          <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Applicant Name
+                </p>
+                <p className="text-lg font-bold text-gray-800 mt-1">
                   {details?.userName || "—"}
-                </dd>
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Applicant Email</dt>
-                <dd className="text-gray-700 sm:col-span-2">
-                  {details?.userEmail || "—"}
-                </dd>
-              </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">University Name</dt>
-                <dd className="text-gray-700 sm:col-span-2">
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  University
+                </p>
+                <p className="text-lg font-bold text-gray-800 mt-1">
                   {details?.universityName || "—"}
-                </dd>
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Degree</dt>
-                <dd className="text-gray-700 sm:col-span-2">
+              <div className="bg-indigo-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Degree
+                </p>
+                <p className="text-lg font-bold text-gray-800 mt-1">
                   {details?.degree || "—"}
-                </dd>
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">
-                  Scholarship Category
-                </dt>
-                <dd className="text-gray-700 sm:col-span-2">
+              <div className="bg-indigo-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Category
+                </p>
+                <p className="text-lg font-bold text-gray-800 mt-1">
                   {details?.scholarshipCategory || "—"}
-                </dd>
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">
+              <div className="bg-amber-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
                   Application Status
-                </dt>
-                <dd className="text-gray-700 sm:col-span-2 capitalize">
+                </p>
+                <p className="text-lg font-bold text-amber-700 mt-1 capitalize">
                   {details?.applicationStatus || "—"}
-                </dd>
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Payment Status</dt>
-                <dd className="text-gray-700 sm:col-span-2 capitalize">
+              <div className="bg-green-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Payment Status
+                </p>
+                <p className="text-lg font-bold text-green-700 mt-1 capitalize">
                   {details?.paymentStatus || "—"}
-                </dd>
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Application Fees</dt>
-                <dd className="text-gray-700 sm:col-span-2">
-                  ৳{details?.applicationFees ?? 0}
-                </dd>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Application Fee
+                </p>
+                <p className="text-lg font-bold text-purple-700 mt-1">
+                  ${details?.applicationFees ?? 0}
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Service Charge</dt>
-                <dd className="text-gray-700 sm:col-span-2">
-                  ৳{details?.serviceCharge ?? 0}
-                </dd>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Service Charge
+                </p>
+                <p className="text-lg font-bold text-purple-700 mt-1">
+                  ${details?.serviceCharge ?? 0}
+                </p>
               </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Application Date</dt>
-                <dd className="text-gray-700 sm:col-span-2">
-                  {details?.applicationDate
-                    ? new Date(details.applicationDate).toLocaleString()
-                    : "—"}
-                </dd>
-              </div>
-
-              <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                <dt className="font-medium text-gray-900">Feedback</dt>
-                <dd className="text-gray-700 sm:col-span-2">
-                  {details?.feedback || "No feedback provided"}
-                </dd>
-              </div>
-            </dl>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                Applicant Email
+              </p>
+              <p className="text-gray-800 mt-1">{details?.userEmail || "—"}</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                Application Date
+              </p>
+              <p className="text-gray-800 mt-1">
+                {details?.applicationDate
+                  ? new Date(details.applicationDate).toLocaleString()
+                  : "—"}
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                Feedback
+              </p>
+              <p className="text-gray-800 mt-1">
+                {details?.feedback || "No feedback provided"}
+              </p>
+            </div>
           </div>
 
-          <div className="modal-action">
+          <div className="modal-action mt-6">
             <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
+              <button className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-0 hover:from-purple-700 hover:to-indigo-700">
+                Close
+              </button>
             </form>
           </div>
         </div>
       </dialog>
+      {/* Review Modal */}
       <dialog
         ref={reviewModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
-        <div className="modal-box">
-          <h2
-            id="modalTitle"
-            className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-2xl"
-          >
-            Rating and Review
+        <div className="modal-box max-w-xl">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6 -m-6 mb-6 rounded-t-lg flex items-center gap-2">
+            <FaStar className="text-yellow-300" />
+            Add Your Review
           </h2>
-          <form onSubmit={handleSubmit(handleSubmitReview)} className="pt-10">
-            <div className="mb-4">
-              <h3 className="mb-1">Your Rating:</h3>
-              <Rating
-                style={{ maxWidth: 150 }}
-                value={rating}
-                onChange={setRating}
-                fractions={10}
-              />
+          <form
+            onSubmit={handleSubmit(handleSubmitReview)}
+            className="space-y-6"
+          >
+            {review && (
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600">For Scholarship:</p>
+                <p className="text-lg font-bold text-purple-700">
+                  {review.scholarshipName || "N/A"}
+                </p>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-bold text-gray-800 mb-3">
+                Your Rating
+              </label>
+              <div className="bg-amber-50 p-4 rounded-lg inline-block">
+                <Rating
+                  style={{ maxWidth: 200 }}
+                  value={rating}
+                  onChange={setRating}
+                  fractions={10}
+                />
+              </div>
+              {rating > 0 && (
+                <p className="text-lg font-bold text-amber-700 mt-2">
+                  {rating}/5 ⭐
+                </p>
+              )}
             </div>
 
-            <textarea
-              {...register("comment", { required: true })}
-              className="textarea mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
-              rows="4"
-              placeholder="Write your review..."
-            ></textarea>
+            <div>
+              <label className="block text-sm font-bold text-gray-800 mb-2">
+                Your Review
+              </label>
+              <textarea
+                {...register("comment", { required: true })}
+                className="textarea w-full border-2 border-gray-200 focus:border-amber-500 focus:outline-none rounded-lg p-3"
+                rows="4"
+                placeholder="Share your experience with this scholarship..."
+              ></textarea>
+            </div>
 
-            <footer className="mt-6 flex justify-end gap-2">
+            <div className="flex justify-end gap-3">
               <button
                 onClick={handleReviewModalClose}
                 type="button"
-                className="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+                className="btn bg-gray-100 text-gray-700 border-0 hover:bg-gray-200"
               >
                 Cancel
               </button>
-
               <button
                 type="submit"
-                className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                className="btn bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0 hover:from-amber-600 hover:to-orange-700"
               >
                 Submit Review
               </button>
-            </footer>
+            </div>
           </form>
         </div>
       </dialog>
+      {/* Edit Modal */}
       <dialog ref={editModalRef} className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <h2
-            id="modalTitle"
-            className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-2xl"
-          >
-            Nothing Editable
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-indigo-600 text-white p-6 -m-6 mb-6 rounded-t-lg">
+            Application Management
           </h2>
+          <div className="bg-teal-50 p-6 rounded-lg text-center">
+            <p className="text-lg font-semibold text-gray-800">
+              ℹ️ Application Information
+            </p>
+            <p className="text-gray-600 mt-2">
+              Once submitted, application details cannot be edited. If you need
+              to make changes, please delete this application and submit a new
+              one.
+            </p>
+          </div>
 
-          <footer className="mt-6 flex justify-end gap-2">
+          <div className="modal-action mt-6">
             <button
               onClick={handleEditModalClose}
               type="button"
-              className="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+              className="btn bg-gradient-to-r from-teal-600 to-indigo-600 text-white border-0 hover:from-teal-700 hover:to-indigo-700"
             >
-              Cancel
+              Got it
             </button>
-          </footer>
+          </div>
         </div>
       </dialog>
     </div>

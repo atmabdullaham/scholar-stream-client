@@ -3,6 +3,7 @@ import "@smastrom/react-rating/style.css";
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaEdit, FaStar, FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import EmptyState from "../../../components/EmptyState";
 import LogoLoader from "../../../components/LogoLoader";
@@ -42,6 +43,7 @@ const MyReviews = () => {
       reviewModalRef.current?.showModal();
     }, 0);
   };
+
   const handleReviewModalClose = () => {
     reviewModalRef.current?.close();
     setReview(null);
@@ -56,7 +58,6 @@ const MyReviews = () => {
         title: "Rating Required",
         text: "Please give a rating before updating",
       });
-
       return;
     }
 
@@ -81,28 +82,38 @@ const MyReviews = () => {
     try {
       const res = await axiosSecure.patch(
         `/reviews/${review._id}`,
-        updatedReview
+        updatedReview,
       );
 
       if (res.data.modifiedCount) {
-        Swal.fire("Success!", "Review updated successfully", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Review updated successfully",
+          confirmButtonColor: "#0d9488",
+        });
         refetch();
         handleReviewModalClose();
       }
     } catch (error) {
-      Swal.fire("Error", "Failed to update review", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to update review",
+      });
     }
   };
 
-  const handleDeleteReview = (id) => {
+  const handleDeleteReview = (id, scholarshipName) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "The review will be deleted",
+      title: "Delete Review?",
+      text: `Your review for "${scholarshipName}" will be permanently deleted.`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Delete",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/reviews/${id}`).then((res) => {
@@ -111,114 +122,230 @@ const MyReviews = () => {
             Swal.fire({
               position: "top-end",
               icon: "success",
-              title: `review deleted`,
+              title: "Review Deleted",
+              text: "Your review has been removed",
               showConfirmButton: false,
-              timer: 3000,
+              timer: 2500,
             });
           }
         });
       }
     });
   };
+
   if (loading || isLoading) {
     return <LogoLoader></LogoLoader>;
   }
+
+  const averageRating =
+    reviews.length > 0
+      ? (
+          reviews.reduce((sum, r) => sum + r.ratingPoint, 0) / reviews.length
+        ).toFixed(1)
+      : 0;
+
   return (
-    <div>
-      <h3>My Reviews: {reviews.length}</h3>
-      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-        {!isLoading && reviews.length === 0 ? (
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl p-8 shadow-lg">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2 flex items-center gap-2">
+              <FaStar className="text-yellow-300" />
+              My Reviews
+            </h1>
+            <p className="text-orange-50">
+              Manage your scholarship reviews and ratings
+            </p>
+          </div>
+          <div className="text-right space-y-2">
+            <div>
+              <p className="text-5xl font-bold">{reviews.length}</p>
+              <p className="text-orange-100">Total Reviews</p>
+            </div>
+            {/* {reviews.length > 0 && (
+              <div>
+                <p className="text-3xl font-bold text-yellow-300">{averageRating}/5</p>
+                <p className="text-orange-100 text-sm">Average Rating</p>
+              </div>
+            )} */}
+          </div>
+        </div>
+      </div>
+
+      {/* Reviews List */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+        {reviews.length === 0 ? (
           <EmptyState></EmptyState>
         ) : (
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th></th>
-                <th>Scholarship Name</th>
-                <th>University Name</th>
-                <th>Review Comment</th>
-                <th>Date</th>
-                <th>Rating</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reviews.map((r, i) => (
-                <tr key={r._id}>
-                  <th>{i + 1}</th>
-                  <td>{r.scholarshipName}</td>
-                  <td>{r.universityName}</td>
-                  <td>{r.reviewComment}</td>
-                  <td>{r.reviewDate}</td>
-                  <td>{r.ratingPoint}</td>
-                  <td>
-                    <button
-                      onClick={() => handleOpenReviewModal(r._id)}
-                      className="btn btn-xs btn-success"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteReview(r._id)}
-                      className="btn btn-xs btn-error"
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-amber-50 to-orange-50 border-b-2 border-gray-200">
+                  <th className="px-4 py-3 text-left font-bold text-gray-800">
+                    #
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800">
+                    Scholarship
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800">
+                    University
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800">
+                    Comment
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-800">
+                    Date
+                  </th>
+                  <th className="px-4 py-3 text-center font-bold text-gray-800">
+                    Rating
+                  </th>
+                  <th className="px-4 py-3 text-center font-bold text-gray-800">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reviews.map((review, index) => (
+                  <tr
+                    key={review._id}
+                    className="border-b hover:bg-amber-50 transition-colors duration-200"
+                  >
+                    <td className="px-4 py-3 font-semibold text-gray-700">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-3">
+                      <p className="font-bold text-gray-800 line-clamp-1">
+                        {review.scholarshipName}
+                      </p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-gray-700 line-clamp-1">
+                        {review.universityName}
+                      </p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <p className="text-gray-600 line-clamp-2">
+                        {review.reviewComment || "No comment"}
+                      </p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+                        {review.reviewDate}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-1">
+                        <span className="text-lg font-bold text-amber-600">
+                          {review.ratingPoint}
+                        </span>
+                        <FaStar className="text-amber-500" size={16} />
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleOpenReviewModal(review._id)}
+                          className="btn btn-sm btn-square bg-teal-600 text-white border-0 hover:bg-teal-700 transition"
+                          title="Edit Review"
+                        >
+                          <FaEdit size={14} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleDeleteReview(
+                              review._id,
+                              review.scholarshipName,
+                            )
+                          }
+                          className="btn btn-sm btn-square bg-red-600 text-white border-0 hover:bg-red-700 transition"
+                          title="Delete Review"
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
+
+      {/* Edit Review Modal */}
       <dialog
         ref={reviewModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
-        <div className="modal-box">
-          <h2
-            id="modalTitle"
-            className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-2xl"
-          >
-            Rating and Review
+        <div className="modal-box max-w-2xl">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <FaStar className="text-amber-500" />
+            Update Review
           </h2>
-          <form onSubmit={handleSubmit(handleSubmitReview)} className="pt-10">
-            <div className="mb-4">
-              <h3 className="mb-1">Your Rating:</h3>
-              <Rating
-                style={{ maxWidth: 150 }}
-                value={rating}
-                onChange={setRating}
-                fractions={10}
-              />
+          <p className="text-gray-600 mb-6">
+            Scholarship:{" "}
+            <span className="font-semibold text-teal-700">
+              {review?.scholarshipName}
+            </span>
+          </p>
+
+          <form
+            onSubmit={handleSubmit(handleSubmitReview)}
+            className="space-y-6"
+          >
+            {/* Rating Section */}
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-6 border border-amber-200">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">
+                Your Rating
+              </h3>
+              <div className="flex items-center gap-4">
+                <Rating
+                  style={{ maxWidth: 200 }}
+                  value={rating}
+                  onChange={setRating}
+                  fractions={10}
+                />
+                <span className="text-4xl font-bold text-amber-600">
+                  {rating.toFixed(1)}
+                </span>
+                <span className="text-2xl text-amber-500">/5</span>
+              </div>
             </div>
 
-            <textarea
-              {...register("comment", { required: true })}
-              className="textarea mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
-              rows="4"
-              placeholder="Write your review..."
-            ></textarea>
+            {/* Comment Section */}
+            <div className="space-y-2">
+              <label className="block text-lg font-bold text-gray-800">
+                Your Review
+              </label>
+              <textarea
+                {...register("comment", { required: "Review is required" })}
+                className="textarea textarea-bordered w-full h-32 focus:border-teal-600 focus:outline-none resize-none text-base"
+                placeholder="Share your honest review about this scholarship..."
+              ></textarea>
+            </div>
 
-            <footer className="mt-6 flex justify-end gap-2">
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-3 pt-4 border-t">
               <button
                 onClick={handleReviewModalClose}
                 type="button"
-                className="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+                className="btn btn-outline border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 Cancel
               </button>
-
               <button
                 type="submit"
-                className="rounded bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                className="btn bg-gradient-to-r from-teal-600 to-indigo-600 text-white border-0 hover:shadow-lg"
               >
                 Update Review
               </button>
-            </footer>
+            </div>
           </form>
         </div>
+        <form method="dialog" className="modal-backdrop">
+          <button onClick={handleReviewModalClose}>close</button>
+        </form>
       </dialog>
     </div>
   );

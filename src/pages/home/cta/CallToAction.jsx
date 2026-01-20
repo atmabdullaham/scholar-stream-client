@@ -8,7 +8,8 @@ const CallToAction = () => {
           Ready to Find Your Scholarship?
         </h2>
         <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-          Join thousands of students who have already secured their scholarship opportunities through Scholar Stream.
+          Join thousands of students who have already secured their scholarship
+          opportunities through Scholar Stream.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

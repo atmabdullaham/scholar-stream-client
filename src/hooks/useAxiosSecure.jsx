@@ -30,7 +30,7 @@ const useAxiosSecure = () => {
           });
         }
         return Promise.reject(error);
-      }
+      },
     );
     return () => {
       axiosSecure.interceptors.request.eject(reqInterceptor);

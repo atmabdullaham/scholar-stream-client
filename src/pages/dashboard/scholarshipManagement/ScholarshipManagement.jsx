@@ -30,7 +30,7 @@ const ScholarshipManagement = () => {
       const res = await axiosSecure.get(
         `/scholarships?limit=${limit}&skip=${
           currentPage * limit
-        }&search=${searchText}&category=${category}`
+        }&search=${searchText}&category=${category}`,
       );
       return res.data;
     },
@@ -43,7 +43,7 @@ const ScholarshipManagement = () => {
   // SEARCH HANDLER
   const handleSearch = (e) => {
     setSearchText(e.target.value);
-    setCurrentPage(0); // reset pagination
+    setCurrentPage(0);
   };
 
   // CATEGORY FILTER
@@ -52,15 +52,16 @@ const ScholarshipManagement = () => {
     setCurrentPage(0);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id, scholarshipName) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "The product will deleted from database permanently",
+      title: "Delete Scholarship?",
+      text: `"${scholarshipName}" will be permanently deleted from the database.`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Delete",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/scholarships/${id}`).then((res) => {
@@ -69,9 +70,10 @@ const ScholarshipManagement = () => {
             Swal.fire({
               position: "top-end",
               icon: "success",
-              title: `Product deleted from database permanently`,
+              title: "Scholarship Deleted",
+              text: `"${scholarshipName}" has been removed.`,
               showConfirmButton: false,
-              timer: 3000,
+              timer: 2500,
             });
           }
         });
@@ -79,102 +81,219 @@ const ScholarshipManagement = () => {
     });
   };
 
+  if (loading || isLoading) {
+    return <LogoLoader></LogoLoader>;
+  }
+
   return (
-    <div>
-      <div className="py-3 w-full">
-        <div className="">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <h2 className="text-3xl font-bold">Total Scholarships: {total}</h2>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-teal-600 to-indigo-600 text-white rounded-xl p-8 shadow-lg">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Scholarship Management</h1>
+            <p className="text-teal-50">
+              Manage all scholarships in your system
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-4xl font-bold">{total}</p>
+            <p className="text-teal-100">Total Scholarships</p>
+          </div>
+        </div>
+      </div>
 
-            {/* FILTERS */}
-            <div className="flex flex-wrap gap-3">
-              <input
-                type="search"
-                placeholder="Search product..."
-                onChange={handleSearch}
-                className="input input-bordered w-full max-w-xs"
-              />
-
-              <select onClick={handleCategory} className="select outline-0 ">
-                <option value="">Select Category</option>
-                <option value="Full fund">Full fund</option>
-                <option value="Partial">Partial</option>
-                <option value="Self fund">Self fund</option>
-              </select>
-            </div>
+      {/* Filters Section */}
+      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <span className="w-1 h-6 bg-teal-600 rounded"></span>
+          Search & Filter
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Search Scholarship
+            </label>
+            <input
+              type="search"
+              placeholder="Enter scholarship or university name..."
+              onChange={handleSearch}
+              className="input input-bordered w-full focus:border-teal-600 focus:outline-none"
+            />
           </div>
 
-          {isLoading && <LogoLoader></LogoLoader>}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Filter by Category
+            </label>
+            <select
+              onChange={handleCategory}
+              className="select select-bordered w-full focus:border-teal-600 focus:outline-none"
+            >
+              <option value="">All Categories</option>
+              <option value="Full fund">Full Fund</option>
+              <option value="Partial">Partial</option>
+              <option value="Self fund">Self Fund</option>
+            </select>
+          </div>
+
+          <div className="flex items-end">
+            <button
+              onClick={() => {
+                setSearchText("");
+                setCategory("");
+                setCurrentPage(0);
+              }}
+              className="btn btn-outline w-full text-teal-600 border-teal-600 hover:bg-teal-50 hover:border-teal-600"
+            >
+              Reset Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+        {scholarships.length === 0 ? (
+          <EmptyState></EmptyState>
+        ) : (
           <div className="overflow-x-auto">
-            {!isLoading && scholarships.length === 0 ? (
-              <EmptyState></EmptyState>
-            ) : (
-              <table className="table table-xs">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Scholarship Name</th>
-                    <th>University Name</th>
-                    <th>Location</th>
-                    <th>Degree</th>
-                    <th>Category</th>
-                    <th>Subject</th>
-                    <th>Ranking</th>
-                    <th>Deadline</th>
-                    <th>Application Fees</th>
-                    <th>Charge</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {scholarships.map((s, i) => (
-                    <tr key={s._id}>
-                      <th>{i + 1}</th>
-                      <td>{s.scholarshipName}</td>
-                      <td>{s.universityName}</td>
-                      <td>
-                        {s.universityCity},{s.universityCountry}
-                      </td>
-                      <td>{s.degree}</td>
-                      <td>{s.scholarshipCategory}</td>
-                      <td>{s.subjectCategory}</td>
-                      <td>{s.universityWorldRank}</td>
-                      <td>
-                        {format(new Date(s.applicationDeadline), "dd MMM yyyy")}
-                      </td>
-
-                      <td>${s.applicationFees}</td>
-                      <td>${s.serviceCharge}</td>
-                      <td>
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-teal-50 to-indigo-50 border-b-2 border-gray-200">
+                  <th className="px-3 py-3 text-left font-bold text-gray-800 w-10">
+                    #
+                  </th>
+                  <th className="px-3 py-3 text-left font-bold text-gray-800 min-w-[200px]">
+                    Scholarship
+                  </th>
+                  <th className="px-3 py-3 text-left font-bold text-gray-800 min-w-[150px]">
+                    University
+                  </th>
+                  <th className="px-3 py-3 text-left font-bold text-gray-800 whitespace-nowrap">
+                    Degree
+                  </th>
+                  <th className="px-3 py-3 text-left font-bold text-gray-800 whitespace-nowrap">
+                    Type
+                  </th>
+                  <th className="px-3 py-3 text-left font-bold text-gray-800 whitespace-nowrap">
+                    Deadline
+                  </th>
+                  <th className="px-3 py-3 text-right font-bold text-gray-800 whitespace-nowrap">
+                    Fees
+                  </th>
+                  <th className="px-3 py-3 text-center font-bold text-gray-800 whitespace-nowrap">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {scholarships.map((scholarship, index) => (
+                  <tr
+                    key={scholarship._id}
+                    className="border-b hover:bg-teal-50 transition-colors duration-200"
+                  >
+                    <td className="px-3 py-3 font-semibold text-gray-700 w-10">
+                      {currentPage * limit + index + 1}
+                    </td>
+                    <td className="px-3 py-3 min-w-[200px]">
+                      <div>
+                        <p className="font-bold text-gray-800 line-clamp-1 text-sm">
+                          {scholarship.scholarshipName}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {scholarship.universityCity},{" "}
+                          {scholarship.universityCountry}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 min-w-[150px]">
+                      <p className="font-medium text-gray-700 line-clamp-1 text-sm">
+                        {scholarship.universityName}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        #{scholarship.universityWorldRank}
+                      </p>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold">
+                        {scholarship.degree}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          scholarship.scholarshipCategory === "Full fund"
+                            ? "bg-green-100 text-green-700"
+                            : scholarship.scholarshipCategory === "Partial"
+                              ? "bg-amber-100 text-amber-700"
+                              : "bg-purple-100 text-purple-700"
+                        }`}
+                      >
+                        {scholarship.scholarshipCategory === "Full fund"
+                          ? "Full"
+                          : scholarship.scholarshipCategory === "Partial"
+                            ? "Part"
+                            : "Self"}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <span className="text-sm font-semibold text-gray-700">
+                        {format(
+                          new Date(scholarship.applicationDeadline),
+                          "dd MMM yy",
+                        )}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap text-right">
+                      <div className="text-sm font-bold text-teal-600">
+                        ${scholarship.applicationFees}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        +${scholarship.serviceCharge}
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <div className="flex items-center justify-center gap-1">
                         <Link
-                          to={`/dashboard/update-scholarship/${s._id}`}
-                          className="btn btn-square"
+                          to={`/dashboard/update-scholarship/${scholarship._id}`}
+                          className="btn btn-sm btn-square bg-teal-600 text-white border-0 hover:bg-teal-700 transition-colors"
+                          title="Edit Scholarship"
                         >
-                          <FaEdit />
+                          <FaEdit size={14} />
                         </Link>
-
                         <button
-                          onClick={() => handleDelete(s._id)}
-                          className="btn btn-square"
+                          onClick={() =>
+                            handleDelete(
+                              scholarship._id,
+                              scholarship.scholarshipName,
+                            )
+                          }
+                          className="btn btn-sm btn-square bg-red-600 text-white border-0 hover:bg-red-700 transition-colors"
+                          title="Delete Scholarship"
                         >
-                          <MdDelete />
+                          <MdDelete size={14} />
                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+        )}
+      </div>
 
-          {/* PAGINATION */}
-          <div className="flex justify-center gap-2 py-10">
+      {/* Pagination Section */}
+      {totalPage > 1 && (
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
             {currentPage > 0 && (
               <button
-                className="btn"
                 onClick={() => setCurrentPage(currentPage - 1)}
+                className="btn btn-sm border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white"
               >
-                Prev
+                ← Previous
               </button>
             )}
 
@@ -182,8 +301,10 @@ const ScholarshipManagement = () => {
               <button
                 key={num}
                 onClick={() => setCurrentPage(num)}
-                className={`btn ${
-                  num === currentPage ? "bg-teal-600 text-white" : ""
+                className={`btn btn-sm ${
+                  num === currentPage
+                    ? "bg-gradient-to-r from-teal-600 to-indigo-600 text-white border-0"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {num + 1}
@@ -192,15 +313,19 @@ const ScholarshipManagement = () => {
 
             {currentPage < totalPage - 1 && (
               <button
-                className="btn"
                 onClick={() => setCurrentPage(currentPage + 1)}
+                className="btn btn-sm border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white"
               >
-                Next
+                Next →
               </button>
             )}
           </div>
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Page {currentPage + 1} of {totalPage} • Showing{" "}
+            {scholarships.length} of {total} scholarships
+          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 };

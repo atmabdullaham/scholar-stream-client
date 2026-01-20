@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
+import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { IoIosArrowForward } from "react-icons/io";
-import { MdManageAccounts } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 import { Link, NavLink, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
@@ -40,7 +41,7 @@ const Navbar = () => {
           className={({ isActive }) => (isActive ? "text-teal-600" : "")}
           to={"/"}
         >
-          Home{" "}
+          Home
         </NavLink>
       </li>
       <li className="font-semibold">
@@ -48,7 +49,31 @@ const Navbar = () => {
           className={({ isActive }) => (isActive ? "text-teal-600" : "")}
           to={"/all-scholarships"}
         >
-          All Scholarships{" "}
+          Scholarships
+        </NavLink>
+      </li>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to={"/about-us"}
+        >
+          About Us
+        </NavLink>
+      </li>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to={"/contact-support"}
+        >
+          Contact
+        </NavLink>
+      </li>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to={"/blog"}
+        >
+          Blog
         </NavLink>
       </li>
     </>
@@ -90,70 +115,96 @@ const Navbar = () => {
       </div>
       <div className="navbar-end gap-3 flex items-center">
         {user ? (
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost p-0 border-0">
-              {photo ? (
-                <img
-                  src={photo}
-                  className="w-10 h-10 rounded-full object-cover"
-                  alt="User"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <CgProfile
-                  size={26}
-                  className="text-gray-700 dark:text-gray-300"
-                />
-              )}
-            </label>
+          <div className="flex items-center gap-2">
+            {/* Dashboard Button */}
+            <Link
+              to={"/dashboard"}
+              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-100 text-teal-700 font-semibold hover:bg-teal-200 transition"
+            >
+              <MdDashboard /> Dashboard
+            </Link>
 
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-20 menu bg-base-100 dark:bg-gray-800 
+            {/* Profile Dropdown */}
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost p-0 border-0">
+                {photo ? (
+                  <img
+                    src={photo}
+                    className="w-10 h-10 rounded-full object-cover"
+                    alt="User"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <CgProfile
+                    size={26}
+                    className="text-gray-700 dark:text-gray-300"
+                  />
+                )}
+              </label>
+
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-20 menu bg-base-100 dark:bg-gray-800 
     dark:text-gray-200 w-60 mt-3 p-3 shadow-xl rounded-lg space-y-1
     border border-base-content/10 dark:border-gray-700"
-            >
-              <li className="bg-cyan-100 dark:bg-green-900/30 rounded-md p-3 pointer-events-none">
-                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                  Signed in as
-                </p>
-                <p className="text-base font-medium dark:text-white">
-                  {displayName}
-                </p>
-                <p className="text-xs dark:text-gray-300">{email}</p>
-              </li>
+              >
+                <li className="bg-cyan-100 dark:bg-green-900/30 rounded-md p-3 pointer-events-none">
+                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                    Signed in as
+                  </p>
+                  <p className="text-base font-medium dark:text-white">
+                    {displayName}
+                  </p>
+                  <p className="text-xs dark:text-gray-300">{email}</p>
+                </li>
 
-              <li>
-                <Link
-                  to={"/dashboard"}
-                  className="text-sm py-2 mt-1 hover:border-cyan-500 border-l-4 border-transparent 
+                <li>
+                  <Link
+                    to={"/dashboard"}
+                    className="text-sm py-2 mt-1 hover:border-cyan-500 border-l-4 border-transparent 
         hover:bg-cyan-50 dark:hover:bg-green-900/20 dark:hover:text-white
         dark:border-transparent"
-                >
-                  <MdManageAccounts size={20} className="dark:text-gray-300" />
-                  Dashboard
-                  <span className="ml-auto">
-                    <IoIosArrowForward className="dark:text-gray-400" />
-                  </span>
-                </Link>
-              </li>
+                  >
+                    <MdDashboard size={20} className="dark:text-gray-300" />
+                    Dashboard
+                    <span className="ml-auto">
+                      <IoIosArrowForward className="dark:text-gray-400" />
+                    </span>
+                  </Link>
+                </li>
 
-              {/* Logout */}
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm py-2 hover:bg-red-50 dark:hover:bg-red-900/20 
+                <li>
+                  <Link
+                    to={"/dashboard/my-profile"}
+                    className="text-sm py-2 hover:border-indigo-500 border-l-4 border-transparent 
+        hover:bg-indigo-50 dark:hover:bg-indigo-900/20 dark:hover:text-white
+        dark:border-transparent"
+                  >
+                    <FaUser size={20} className="dark:text-gray-300" />
+                    My Profile
+                    <span className="ml-auto">
+                      <IoIosArrowForward className="dark:text-gray-400" />
+                    </span>
+                  </Link>
+                </li>
+
+                {/* Logout */}
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="text-sm py-2 hover:bg-red-50 dark:hover:bg-red-900/20 
         border-l-4 border-transparent hover:border-red-500 dark:hover:border-red-600
         dark:text-gray-200"
-                >
-                  <FiLogOut size={20} className="dark:text-gray-300" />
-                  Logout
-                  <span className="ml-auto">
-                    <IoIosArrowForward className="dark:text-gray-400" />
-                  </span>
-                </button>
-              </li>
-            </ul>
+                  >
+                    <FiLogOut size={20} className="dark:text-gray-300" />
+                    Logout
+                    <span className="ml-auto">
+                      <IoIosArrowForward className="dark:text-gray-400" />
+                    </span>
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : (
           /* If NOT logged in */

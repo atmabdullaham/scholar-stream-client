@@ -17,21 +17,27 @@ const ScholarshipCard = ({ scholarship }) => {
   } = scholarship;
   const formattedDateTime = format(
     new Date(applicationDeadline),
-    "dd MMM yyyy, hh:mm a"
+    "dd MMM yyyy, hh:mm a",
   );
   return (
     <div className="group">
       <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100">
         {/* Image */}
-        <div className="overflow-hidden">
-          <Image
-            urlEndpoint="https://ik.imagekit.io/atm"
-            src={imageUrl}
-            width={800}
-            height={600}
-            alt={scholarshipName}
-            className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+        <div className="overflow-hidden bg-gradient-to-br from-teal-200 to-indigo-200 h-56">
+          {typeof imageUrl === "string" && imageUrl.trim() ? (
+            <Image
+              urlEndpoint="https://ik.imagekit.io/atm"
+              src={imageUrl}
+              width={800}
+              height={600}
+              alt={scholarshipName}
+              className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-56 flex items-center justify-center bg-gradient-to-br from-teal-300 to-indigo-300">
+              <p className="text-white font-semibold">Scholarship Image</p>
+            </div>
+          )}
         </div>
 
         {/* Content */}
