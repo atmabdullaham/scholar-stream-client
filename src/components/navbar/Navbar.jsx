@@ -52,25 +52,39 @@ const Navbar = () => {
           All Scholarships
         </NavLink>
       </li>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to="/about"
+        >
+          About
+        </NavLink>
+      </li>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to="/blog"
+        >
+          Blog
+        </NavLink>
+      </li>
+      <li className="font-semibold">
+        <NavLink
+          className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+          to="/help"
+        >
+          Help
+        </NavLink>
+      </li>
       {user && (
-        <>
-          <li className="font-semibold">
-            <NavLink
-              className={({ isActive }) => (isActive ? "text-teal-600" : "")}
-              to={"/dashboard"}
-            >
-              Dashboard
-            </NavLink>
-          </li>
-          <li className="font-semibold">
-            <NavLink
-              className={({ isActive }) => (isActive ? "text-teal-600" : "")}
-              to="/about"
-            >
-              About
-            </NavLink>
-          </li>
-        </>
+        <li className="font-semibold">
+          <NavLink
+            className={({ isActive }) => (isActive ? "text-teal-600" : "")}
+            to={"/dashboard"}
+          >
+            Dashboard
+          </NavLink>
+        </li>
       )}
     </>
   );
