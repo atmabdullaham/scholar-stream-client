@@ -1,182 +1,207 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { Link } from "react-router";
 import Logo from "../logo/Logo";
 
 const Footer = () => {
   return (
-    <footer className="bg-white  dark:bg-gray-900">
+    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
         <div className="sm:flex sm:items-center sm:justify-between">
-          <Logo></Logo>
+          <Logo />
 
           <ul className="mt-8 flex justify-start gap-6 sm:mt-0 sm:justify-end">
-            <a href="https://facebook.com" target="_blank">
-              <FaFacebook size={24} color="#1877F2" />
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-75 transition"
+              title="Facebook"
+            >
+              <FaFacebook size={24} className="text-blue-600" />
             </a>
 
-            <a href="https://instagram.com" target="_blank">
-              <FaInstagram size={24} color="#E4405F" />
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-75 transition"
+              title="Instagram"
+            >
+              <FaInstagram size={24} className="text-pink-600" />
             </a>
 
-            <a href="https://linkedin.com" target="_blank">
-              <FaLinkedin size={24} color="#0A66C2" />
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-75 transition"
+              title="LinkedIn"
+            >
+              <FaLinkedin size={24} className="text-blue-700" />
             </a>
 
             <a
               href="https://twitter.com"
-              className="dark:bg-gray-200 rounded-md"
               target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-75 transition dark:bg-gray-200 rounded-md"
+              title="Twitter/X"
             >
-              <FaXTwitter size={24} color="#000000" />
+              <FaXTwitter size={24} className="text-gray-900 dark:text-gray-900" />
             </a>
 
-            <a href="https://youtube.com" target="_blank">
-              <FaYoutube size={24} color="#FF0000" />
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-75 transition"
+              title="YouTube"
+            >
+              <FaYoutube size={24} className="text-red-600" />
             </a>
           </ul>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:pt-16 dark:border-gray-800">
+        <div className="grid grid-cols-1 gap-8 border-t border-gray-100 dark:border-gray-800 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:pt-16">
           <div>
             <p className="font-medium text-gray-900 dark:text-white">
-              Services
+              Resources
             </p>
 
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
+                <Link
+                  to="/about"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
                 >
-                  Company Review
-                </a>
+                  About Us
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
+                <Link
+                  to="/contact"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
                 >
-                  Accounts Review
-                </a>
+                  Contact Support
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
+                <Link
+                  to="/blog"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
                 >
-                  HR Consulting
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-medium text-gray-900 dark:text-white">Company</p>
-
-            <ul className="mt-6 space-y-4 text-sm">
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  About
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  Meet the Team
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  Accounts Review
-                </a>
+                  Blog & Articles
+                </Link>
               </li>
             </ul>
           </div>
 
           <div>
             <p className="font-medium text-gray-900 dark:text-white">
-              Helpful Links
+              Platform
             </p>
 
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
+                <Link
+                  to="/all-scholarships"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
                 >
-                  Contact
-                </a>
+                  Browse Scholarships
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
+                >
+                  Dashboard
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/help"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
+                >
+                  Help & FAQs
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="font-medium text-gray-900 dark:text-white">
+              Information
+            </p>
+
+            <ul className="mt-6 space-y-4 text-sm">
+              <li>
+                <Link
+                  to="/privacy"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/terms"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
+                >
+                  Terms of Service
+                </Link>
               </li>
 
               <li>
                 <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
+                  href="mailto:support@scholarstream.com"
+                  className="text-gray-700 dark:text-gray-300 transition hover:text-teal-600 dark:hover:text-teal-400"
                 >
-                  FAQs
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  Live Chat
+                  Email Support
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <p className="font-medium text-gray-900 dark:text-white">Legal</p>
+            <p className="font-medium text-gray-900 dark:text-white">
+              Contact
+            </p>
 
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  Accessibility
-                </a>
+                <p className="text-gray-700 dark:text-gray-300">
+                  📧 support@scholarstream.com
+                </p>
               </li>
 
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  Returns Policy
-                </a>
+                <p className="text-gray-700 dark:text-gray-300">
+                  📞 +1 (555) 123-4567
+                </p>
               </li>
 
               <li>
-                <a
-                  href="#"
-                  className="text-gray-700 transition hover:opacity-75 dark:text-gray-200"
-                >
-                  Refund Policy
-                </a>
+                <p className="text-gray-700 dark:text-gray-300">
+                  📍 123 Education Lane, Learning City, LC 12345
+                </p>
               </li>
             </ul>
           </div>
         </div>
 
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          © {new Date().getFullYear()}. Scholar Stream. All rights reserved.
-        </p>
+        <div className="border-t border-gray-100 dark:border-gray-800 pt-8">
+          <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+            © {new Date().getFullYear()} Scholar Stream. All rights reserved. |
+            Made with ❤️ for students worldwide.
+          </p>
+        </div>
       </div>
     </footer>
   );
