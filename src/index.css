@@ -12,11 +12,6 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: light;
-}
-
-html.dark {
-  color-scheme: dark;
 }
 
 body {
@@ -24,12 +19,6 @@ body {
   color: #1f2937;
   background-color: #ffffff;
   line-height: 1.6;
-  transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
-}
-
-html.dark body {
-  color: #f3f4f6;
-  background-color: #111827;
 }
 
 /* ============================================
@@ -40,15 +29,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #1f2937;
   font-weight: 700;
   line-height: 1.2;
-}
-
-html.dark h1,
-html.dark h2,
-html.dark h3,
-html.dark h4,
-html.dark h5,
-html.dark h6 {
-  color: #f3f4f6;
 }
 
 h1 {
@@ -65,10 +45,6 @@ h3 {
 
 p {
   color: #6b7280;
-}
-
-html.dark p {
-  color: #d1d5db;
 }
 
 /* ============================================
@@ -88,10 +64,6 @@ input:focus, textarea:focus, select:focus {
 
 input::placeholder {
   color: #9ca3af;
-}
-
-html.dark input::placeholder {
-  color: #6b7280;
 }
 
 /* ============================================
@@ -119,13 +91,5 @@ a {
 
 a:hover {
   color: #0f766e;
-}
-
-html.dark a {
-  color: #2dd4bf;
-}
-
-html.dark a:hover {
-  color: #14b8a6;
 }
 

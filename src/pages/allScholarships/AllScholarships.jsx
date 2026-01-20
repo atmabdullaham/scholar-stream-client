@@ -14,7 +14,7 @@ const AllScholarships = () => {
   const [category, setCategory] = useState("");
   const [degree, setDegree] = useState("");
 
-  const limit = 12;
+  const limit = 9;
 
   const { data = {}, isLoading } = useQuery({
     queryKey: [
@@ -51,18 +51,18 @@ const AllScholarships = () => {
     <section className="w-11/12 md:w-10/12 mx-auto py-10">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
           All Scholarships
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 mt-1">
+        <p className="text-gray-600 mt-1">
           Total Available Scholarships: {total}
         </p>
       </div>
 
-      <div className="bg-teal-50 dark:bg-gray-800 rounded-xl shadow-sm p-5 mb-8 border border-gray-200 dark:border-gray-700">
+      <div className="bg-teal-50 rounded-xl shadow-sm p-5 mb-8 border border-gray-200">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-gray-700">
               Search
             </label>
             <input
@@ -72,12 +72,12 @@ const AllScholarships = () => {
                 setSearchText(e.target.value);
                 setCurrentPage(0);
               }}
-              className="input input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="input input-bordered w-full bg-white text-gray-900"
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-gray-700">
               Category
             </label>
             <select
@@ -85,7 +85,7 @@ const AllScholarships = () => {
                 setCategory(e.target.value);
                 setCurrentPage(0);
               }}
-              className="select select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="select select-bordered w-full bg-white text-gray-900"
             >
               <option value="">All</option>
               <option value="Full fund">Full fund</option>
@@ -95,7 +95,7 @@ const AllScholarships = () => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-gray-700">
               Degree
             </label>
             <select
@@ -103,7 +103,7 @@ const AllScholarships = () => {
                 setDegree(e.target.value);
                 setCurrentPage(0);
               }}
-              className="select select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="select select-bordered w-full bg-white text-gray-900"
             >
               <option value="">All</option>
               <option value="Deploma">Diploma</option>
@@ -115,12 +115,12 @@ const AllScholarships = () => {
           </div>
 
           <div className="lg:col-span-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-gray-700">
               Sort By
             </label>
             <select
               onChange={handleSort}
-              className="select select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="select select-bordered w-full bg-white text-gray-900"
             >
               <option disabled selected>
                 Select option
@@ -139,13 +139,13 @@ const AllScholarships = () => {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <SkeletonLoader count={12} variant="card" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <SkeletonLoader count={9} variant="card" />
         </div>
       ) : scholarships.length === 0 ? (
         <EmptyState></EmptyState>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {scholarships.map((scholarship) => (
             <ScholarshipCard key={scholarship._id} scholarship={scholarship} />
           ))}
@@ -158,7 +158,7 @@ const AllScholarships = () => {
           {currentPage > 0 && (
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
-              className="btn btn-outline dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="btn btn-outline"
             >
               Prev
             </button>
@@ -170,8 +170,8 @@ const AllScholarships = () => {
               onClick={() => setCurrentPage(num)}
               className={`btn ${
                 num === currentPage
-                  ? "bg-teal-600 text-white dark:bg-teal-700"
-                  : "btn-outline dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-teal-600 text-white"
+                  : "btn-outline"
               }`}
             >
               {num + 1}

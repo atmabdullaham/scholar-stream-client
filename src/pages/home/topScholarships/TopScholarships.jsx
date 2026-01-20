@@ -26,11 +26,11 @@ const TopScholarships = () => {
         </div>
 
         {isLoading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <SkeletonLoader count={8} variant="card" />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <SkeletonLoader count={6} variant="card" />
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {scholarships.map((scholarship) => (
               <ScholarshipCard
                 key={scholarship._id}
