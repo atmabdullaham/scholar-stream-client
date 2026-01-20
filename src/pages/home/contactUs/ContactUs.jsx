@@ -1,39 +1,28 @@
 import { FiMail, FiMapPin, FiPhone, FiSend } from "react-icons/fi";
-import { motion } from "motion/react";
 
 const ContactUs = () => {
   return (
-    <section className="bg-white dark:bg-gray-900 py-16 md:py-24 transition-colors duration-300">
+    <section className="bg-teal-50 py-10 md:py-16">
       <div className="mx-auto w-11/12 md:w-10/12">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <div className="text-center max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
             Contact Us
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-gray-600">
             Have questions about scholarships or need assistance? Our team is
             ready to support you.
           </p>
-        </motion.div>
+        </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-2">
           {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="rounded-lg bg-gray-50 dark:bg-gray-800 p-8 shadow-md space-y-6"
-          >
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="rounded-2xl bg-white p-6 shadow-sm  space-y-6">
+            <h3 className="text-xl font-semibold text-gray-800">
               Get in Touch
             </h3>
 
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               Contact us for scholarship guidance, technical help, or general
               inquiries related to Scholar Stream.
             </p>
@@ -41,51 +30,38 @@ const ContactUs = () => {
             {/* Info Items */}
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <FiMail className="text-teal-600 dark:text-teal-400 mt-1 flex-shrink-0" />
+                <FiMail className="text-teal-600 mt-1" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    Email
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm font-medium text-gray-700">Email</p>
+                  <p className="text-sm text-gray-600">
                     support@scholarstream.com
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <FiPhone className="text-teal-600 dark:text-teal-400 mt-1 flex-shrink-0" />
+                <FiPhone className="text-teal-600 mt-1" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    Phone
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    +1 (555) 123-4567
-                  </p>
+                  <p className="text-sm font-medium text-gray-700">Phone</p>
+                  <p className="text-sm text-gray-600">+880 1234-567890</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <FiMapPin className="text-teal-600 dark:text-teal-400 mt-1 flex-shrink-0" />
+                <FiMapPin className="text-teal-600 mt-1" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-sm font-medium text-gray-700">
                     Office Location
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    123 Education Lane, Learning City, LC 12345
-                  </p>
+                  <p className="text-sm text-gray-600">Dhaka, Bangladesh</p>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="rounded-lg bg-gray-50 dark:bg-gray-800 p-8 shadow-md"
-          >
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+          {/* Contact Form (Static) */}
+          <div className="rounded-2xl bg-white p-6 shadow-sm ">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
               Send Us a Message
             </h3>
 
@@ -93,28 +69,28 @@ const ContactUs = () => {
               <input
                 type="text"
                 placeholder="Your Name"
-                className="input input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="input input-bordered w-full"
               />
               <input
                 type="email"
                 placeholder="Your Email"
-                className="input input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="input input-bordered w-full"
               />
               <textarea
                 rows="4"
                 placeholder="Your Message"
-                className="textarea textarea-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="textarea textarea-bordered w-full"
               ></textarea>
 
               <button
                 type="button"
-                className="btn w-full bg-teal-600 hover:bg-teal-700 text-white dark:bg-teal-700 dark:hover:bg-teal-600 flex items-center justify-center gap-2"
+                className="btn w-full bg-teal-600 text-white hover:bg-teal-700 flex items-center justify-center gap-2"
               >
                 <FiSend />
                 Send Message
               </button>
             </form>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

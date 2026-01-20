@@ -6,11 +6,6 @@ import MainLayout from "../layouts/MainLayout";
 import AllScholarships from "../pages/allScholarships/AllScholarships";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import About from "../pages/about/About";
-import Blog from "../pages/blog/Blog";
-import Help from "../pages/help/Help";
-import Privacy from "../pages/privacy/Privacy";
-import Terms from "../pages/terms/Terms";
 import AddScholarship from "../pages/dashboard/addScholarship/AddScholarship";
 import AllReviews from "../pages/dashboard/allReviews/AllReviews";
 import Analytics from "../pages/dashboard/analytics/Analytics";
@@ -51,26 +46,6 @@ const router = createBrowserRouter([
             <ScholarshipDetails></ScholarshipDetails>
           </PrivateRoutes>
         ),
-      },
-      {
-        path: "/about",
-        Component: About,
-      },
-      {
-        path: "/blog",
-        Component: Blog,
-      },
-      {
-        path: "/help",
-        Component: Help,
-      },
-      {
-        path: "/privacy",
-        Component: Privacy,
-      },
-      {
-        path: "/terms",
-        Component: Terms,
       },
     ],
   },

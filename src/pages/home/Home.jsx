@@ -6,6 +6,7 @@ import Hero from "./hero/Hero";
 import Newsletter from "./newsletter/Newsletter";
 import Statistics from "./statistics/Statistics";
 import SuccessStories from "./successStories/SuccessStories";
+import Testimonials from "./testimonials/Testimonials";
 import TopScholarships from "./topScholarships/TopScholarships";
 
 const Home = () => {
@@ -15,10 +16,11 @@ const Home = () => {
       <TopScholarships />
       <Features />
       <Statistics />
-      <SuccessStories />
+      <Testimonials />
       <FAQ />
       <Newsletter />
       <CallToAction />
+      <SuccessStories />
       <ContactUs />
     </div>
   );
