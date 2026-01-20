@@ -14,7 +14,7 @@ const DashboardLayout = () => {
     <div className="drawer lg:drawer-open">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
-      <div className="drawer-content flex flex-col min-h-screen bg-gray-50">
+      <div className="drawer-content flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         <nav className="navbar bg-teal-600 text-white shadow-md px-4 md:px-8">
           <label htmlFor="dashboard-drawer" className="btn btn-ghost lg:hidden">
             <TbLayoutSidebarLeftExpandFilled size={24} />

@@ -114,8 +114,8 @@ const ScholarshipDetails = () => {
   };
 
   return (
-    <div className="bg-teal-50 py-8">
-      <div className="max-w-5xl mx-auto p-4 md:p-10 bg-white rounded-2xl">
+    <div className="bg-teal-50 dark:bg-gray-900 py-8 transition-colors duration-300">
+      <div className="max-w-5xl mx-auto p-4 md:p-10 bg-white dark:bg-gray-800 rounded-2xl">
         {/* Banner Image */}
         <div className="w-full rounded-2xl overflow-hidden shadow-lg relative group">
           <Image
@@ -159,16 +159,16 @@ const ScholarshipDetails = () => {
             <div className="flex items-center gap-3">
               <FaUniversity className="text-teal-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">University</p>
-                <p className="text-lg font-semibold">{universityName}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">University</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">{universityName}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <FaMapMarkerAlt className="text-teal-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium">
+                <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
+                <p className="font-medium text-gray-900 dark:text-white">
                   {universityCity}, {universityCountry}
                 </p>
               </div>
@@ -177,8 +177,8 @@ const ScholarshipDetails = () => {
             <div className="flex items-center gap-3">
               <FaGlobe className="text-teal-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">World Rank</p>
-                <p className="font-medium">#{universityWorldRank}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">World Rank</p>
+                <p className="font-medium text-gray-900 dark:text-white">#{universityWorldRank}</p>
               </div>
             </div>
           </div>
@@ -188,58 +188,58 @@ const ScholarshipDetails = () => {
             <div className="flex items-center gap-3">
               <MdCategory className="text-teal-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">Scholarship Type</p>
-                <p className="font-medium">{scholarshipCategory}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Scholarship Type</p>
+                <p className="font-medium text-gray-900 dark:text-white">{scholarshipCategory}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <MdSchool className="text-teal-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">Degree Level</p>
-                <p className="font-medium">{degree}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Degree Level</p>
+                <p className="font-medium text-gray-900 dark:text-white">{degree}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <FiLayers className="text-teal-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">Subject Category</p>
-                <p className="font-medium capitalize">{subjectCategory}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Subject Category</p>
+                <p className="font-medium capitalize text-gray-900 dark:text-white">{subjectCategory}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* DEADLINE SECTION */}
-        <div className="mt-10 p-5 border border-red-100 bg-red-50 rounded-lg flex items-center gap-4">
+        <div className="mt-10 p-5 border border-red-100 dark:border-red-900/30 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-center gap-4">
           <FaClock className="text-red-600 text-2xl" />
           <div>
-            <p className="text-red-600 font-semibold">Application Deadline</p>
-            <p className="text-xl font-bold">{formattedDateTime}</p>
+            <p className="text-red-600 dark:text-red-400 font-semibold">Application Deadline</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-white">{formattedDateTime}</p>
           </div>
         </div>
 
         {/* FEES */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-4 bg-gray-50 rounded-lg shadow-sm ">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm ">
             <FaMoneyBill className="text-green-600 text-xl mb-2" />
-            <p className="text-gray-500 text-sm">Application Fee</p>
-            <p className="text-lg font-semibold">${applicationFees}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Application Fee</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">${applicationFees}</p>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg shadow-sm ">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm ">
             <FaMoneyBill className="text-blue-600 text-xl mb-2" />
-            <p className="text-gray-500 text-sm">Tuition Fee</p>
-            <p className="text-lg font-semibold">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Tuition Fee</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">
               {tuitionFees ? `$${tuitionFees}` : "Not Required"}
             </p>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg shadow-sm ">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm ">
             <FaMoneyBill className="text-rose-600 text-xl mb-2" />
-            <p className="text-gray-500 text-sm">Service Charge</p>
-            <p className="text-lg font-semibold">${serviceCharge}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Service Charge</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">${serviceCharge}</p>
           </div>
         </div>
 
@@ -256,15 +256,15 @@ const ScholarshipDetails = () => {
         {/* Reviews Section */}
         <div className="mt-14">
           {totalReviews !== 0 && (
-            <h2 className="text-2xl font-bold text-teal-700">Reviews</h2>
+            <h2 className="text-2xl font-bold text-teal-700 dark:text-teal-400">Reviews</h2>
           )}
           {totalReviews !== 0 && (
-            <div className="mt-6 flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+            <div className="mt-6 flex items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-3xl font-bold text-yellow-500">
                   {averageRating}
                 </span>
-                <span className="text-gray-500">/ 5</span>
+                <span className="text-gray-500 dark:text-gray-400">/ 5</span>
               </div>
 
               <div className="flex-1">
@@ -274,12 +274,12 @@ const ScholarshipDetails = () => {
                     value={averageRating}
                     readOnly
                   />
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     ({totalReviews} reviews)
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Average student rating for this scholarship
                 </p>
               </div>
