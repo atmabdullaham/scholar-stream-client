@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const Hero = () => {
   return (
-    <div className="bg-gradient-to-r from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 pt-20">
+    <div className="bg-gradient-to-r from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 pt-0">
       <div className="py-10 md:py-20 w-11/12 md:w-10/12 mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-10">
           {/* Left Section */}

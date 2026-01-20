@@ -11,18 +11,26 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    // Check localStorage first for stored preference
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      return savedTheme === "dark";
+    }
+    // Fallback to system preference
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize theme from localStorage on mount
+  // Initialize theme on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    
-    if (savedTheme) {
-      setIsDark(savedTheme === "dark");
+    // Apply theme immediately
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.style.colorScheme = "dark";
     } else {
-      setIsDark(prefersDark);
+      document.documentElement.classList.remove("dark");
+      document.documentElement.style.colorScheme = "light";
     }
     setIsLoading(false);
   }, []);
@@ -32,9 +40,11 @@ export const ThemeProvider = ({ children }) => {
     if (!isLoading) {
       if (isDark) {
         document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
         localStorage.setItem("theme", "dark");
       } else {
         document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
         localStorage.setItem("theme", "light");
       }
     }
@@ -56,3 +66,4 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+

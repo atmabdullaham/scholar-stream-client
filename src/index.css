@@ -97,6 +97,11 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -104,6 +109,7 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
   line-height: 1.6;
+  transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
 }
 
 /* ============================================
